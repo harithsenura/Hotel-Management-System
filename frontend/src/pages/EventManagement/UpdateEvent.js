@@ -4,8 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import SideBar from "../../components/Slider/EventSidebar.js";
 import { toast } from "react-toastify";
 
-
-
 export default function UpdateEvent() {
     const { id } = useParams(); // Retrieve the event ID from the URL
     const navigate = useNavigate(); // For navigation after update
@@ -20,6 +18,18 @@ export default function UpdateEvent() {
         Decorations: "",
         NoOfGuests: ""
     });
+
+    const [errors, setErrors] = useState({
+        Event: "",
+        Date: "",
+        Venue: "",
+        EventPlanner: "",
+        StartTime: "",
+        EndTime: "",
+        Decorations: "",
+        NoOfGuests: ""
+    });
+
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
 
@@ -36,28 +46,91 @@ export default function UpdateEvent() {
             ...prevState,
             [name]: value
         }));
+
+        // Clear errors on change
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: ""
+        }));
+    };
+
+    const validateFields = () => {
+        let newErrors = {};
+
+        // Validate Event Name
+        if (!event.Event.trim()) {
+            newErrors.Event = "Event name is required.";
+        }
+
+        // Validate Date
+        const today = new Date();
+        const selectedDate = new Date(event.Date);
+        if (!event.Date) {
+            newErrors.Date = "Event date is required.";
+        } else if (selectedDate <= today) {
+            newErrors.Date = "Event date must be in the future.";
+        }
+
+        // Validate Venue
+        if (!event.Venue.trim()) {
+            newErrors.Venue = "Venue is required.";
+        }
+
+        // Validate Event Planner
+        if (!event.EventPlanner.trim()) {
+            newErrors.EventPlanner = "Event planner is required.";
+        }
+
+        // Validate Start Time
+        if (!event.StartTime) {
+            newErrors.StartTime = "Start time is required.";
+        }
+
+        // Validate End Time
+        if (!event.EndTime) {
+            newErrors.EndTime = "End time is required.";
+        } else if (event.EndTime <= event.StartTime) {
+            newErrors.EndTime = "End time must be after start time.";
+        }
+
+        // Validate Decorations
+        if (!event.Decorations.trim()) {
+            newErrors.Decorations = "Decorations information is required.";
+        }
+
+        // Validate Number of Guests
+        if (!event.NoOfGuests) {
+            newErrors.NoOfGuests = "Number of guests is required.";
+        } else if (event.NoOfGuests <= 0) {
+            newErrors.NoOfGuests = "Number of guests must be greater than 0.";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Returns true if no errors
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Update the event details
-        axios.put(`http://localhost:5000/events/${id}`, event)
-            .then(() => {
-                toast.success("Event updated successfully!");
-               
+        if (validateFields()) {
+            // Update the event details
+            axios.put(`http://localhost:5000/events/${id}`, event)
+                .then(() => {
+                    setAlertMessage("Success Update");
+                    setShowAlert(true);
+                    setTimeout(() => setShowAlert(false), 3000);
                     navigate("/events"); // Redirect to events list after update
-              
-            })
-            .catch(err => {
-                setAlertMessage("Error updating event.");
-                setShowAlert(true);
-                setTimeout(() => setShowAlert(false), 3000);
-            });
+                })
+                .catch(err => {
+                    setAlertMessage("Error updating event.");
+                    setShowAlert(true);
+                    setTimeout(() => setShowAlert(false), 3000);
+                });
+        }
     };
 
     return (
         <div>
-           <SideBar/>
+            <SideBar />
             <div style={containerStyle}>
                 <h1 style={headerStyle}>Update Event</h1>
                 <form onSubmit={handleSubmit} style={formStyle}>
@@ -71,6 +144,7 @@ export default function UpdateEvent() {
                             style={inputStyle}
                             required
                         />
+                        {errors.Event && <p style={errorStyle}>{errors.Event}</p>}
                     </div>
                     <div style={formGroupStyle}>
                         <label style={labelStyle}>Date:</label>
@@ -82,6 +156,7 @@ export default function UpdateEvent() {
                             style={inputStyle}
                             required
                         />
+                        {errors.Date && <p style={errorStyle}>{errors.Date}</p>}
                     </div>
 
                     <div style={formGroupStyle}>
@@ -94,6 +169,7 @@ export default function UpdateEvent() {
                             style={inputStyle}
                             required
                         />
+                        {errors.Venue && <p style={errorStyle}>{errors.Venue}</p>}
                     </div>
                     <div style={formGroupStyle}>
                         <label style={labelStyle}>Event Planner:</label>
@@ -105,6 +181,7 @@ export default function UpdateEvent() {
                             style={inputStyle}
                             required
                         />
+                        {errors.EventPlanner && <p style={errorStyle}>{errors.EventPlanner}</p>}
                     </div>
                     <div style={formGroupStyle}>
                         <label style={labelStyle}>Start Time:</label>
@@ -116,6 +193,7 @@ export default function UpdateEvent() {
                             style={inputStyle}
                             required
                         />
+                        {errors.StartTime && <p style={errorStyle}>{errors.StartTime}</p>}
                     </div>
                     <div style={formGroupStyle}>
                         <label style={labelStyle}>End Time:</label>
@@ -127,6 +205,7 @@ export default function UpdateEvent() {
                             style={inputStyle}
                             required
                         />
+                        {errors.EndTime && <p style={errorStyle}>{errors.EndTime}</p>}
                     </div>
                     <div style={formGroupStyle}>
                         <label style={labelStyle}>Decorations:</label>
@@ -138,6 +217,7 @@ export default function UpdateEvent() {
                             style={inputStyle}
                             required
                         />
+                        {errors.Decorations && <p style={errorStyle}>{errors.Decorations}</p>}
                     </div>
                     <div style={formGroupStyle}>
                         <label style={labelStyle}>No. of Guests:</label>
@@ -149,6 +229,7 @@ export default function UpdateEvent() {
                             style={inputStyle}
                             required
                         />
+                        {errors.NoOfGuests && <p style={errorStyle}>{errors.NoOfGuests}</p>}
                     </div>
                     <button type="submit" style={buttonStyle}>Update Event</button>
                 </form>
@@ -214,4 +295,10 @@ const alertStyle = {
     borderRadius: '5px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
     marginTop: '20px',
+};
+
+const errorStyle = {
+    color: 'red',
+    fontSize: '12px',
+    marginTop: '5px',
 };

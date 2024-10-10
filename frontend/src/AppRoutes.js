@@ -34,9 +34,9 @@ export default function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/events" element={<AllEvents />} /> {/* Default route */}
-      <Route path="/add" element={<AddEvent />} /> {/* Route to add event */}
-      <Route path="/eventPlanner/add" element={<AddEventPlanner />} /> {/* Add Event Planner */}
-      <Route path="/eventPlanners" element={<AllEventPlanners />} /> {/* View All Event Planners */}
+      <Route path="/events/add" element={<AddEvent />} /> {/* Route to add event */}
+      <Route path="/eventplanner/add" element={<AddEventPlanner />} /> {/* Add Event Planner */}
+      <Route path="/eventplanners" element={<AllEventPlanners />} /> {/* View All Event Planners */}
       <Route path="/planner/:id" element={<UpdatePlanner />} /> {/* Update specific event planner */}
       <Route path="/events/:id" element={<UpdateEvent />} /> {/* Update event profile */}
       <Route path="/" element={<Edashboard />} /> {/* Fixed closing tag */}

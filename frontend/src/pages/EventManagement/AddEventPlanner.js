@@ -1,52 +1,118 @@
 import React, { useState } from "react";
 import axios from "axios";
+import SideBar from "../../components/Slider/EventSidebar";
 
 export default function AddEventPlanner() {
   const [Name, setName] = useState("");
   const [AssignedEvent, setAssignedEvent] = useState("");
-  const [SalaryForTheEvent, setSalaryForTheEvent] = useState("");
+  const [Salary, setSalary] = useState("");
   const [Email, setEmail] = useState("");
   const [ContactNumber, setContactNumber] = useState("");
 
-  function sendData(e) {
-    e.preventDefault(); // Prevent the default form submission behavior
+  // Error state for each field
+  const [errors, setErrors] = useState({
+    name: "",
+    assignedEvent: "",
+    salary: "",
+    email: "",
+    contactNumber: "",
+  });
+
+  function validateForm() {
+    let tempErrors = { name: "", assignedEvent: "", salary: "", email: "", contactNumber: "" };
+    let isValid = true;
+
+    // Validation for name
+    if (Name.trim() === "") {
+      tempErrors.name = "Name is required.";
+      isValid = false;
+    }
+
+    // Validation for assigned event
+    if (AssignedEvent === "") {
+      tempErrors.assignedEvent = "Assigned event is required.";
+      isValid = false;
+    }
 
     // Validation for contact number
-    // Check if the length of the contact number is exactly 10
-    // and if it contains only digits using a regular expression
     if (ContactNumber.length !== 10 || !/^\d+$/.test(ContactNumber)) {
-      alert("Contact number must be 10 digits."); // Alert the user if validation fails
-      return; // Exit the function if validation fails
+      tempErrors.contactNumber = "Contact number must be 10 digits.";
+      isValid = false;
     }
 
     // Validation for email
-    // Check if the email contains the '@' character
-    if (!Email.includes("@")) {
-      alert("Email must contain an '@' sign."); // Alert the user if validation fails
-      return; // Exit the function if validation fails
+    if (!Email.includes("@") || !Email.includes(".")) {
+      tempErrors.email = "Email must be valid.";
+      isValid = false;
+    }
+
+    // Validation for salary
+    if (!Salary) {
+      tempErrors.salary = "Salary is required.";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
+  }
+
+  // Validate fields immediately on change
+  function validateField(field, value) {
+    let tempErrors = { ...errors };
+    switch (field) {
+      case "name":
+        tempErrors.name = value.trim() === "" ? "Name is required." : "";
+        break;
+      case "assignedEvent":
+        tempErrors.assignedEvent = value === "" ? "Assigned planner is required." : "";
+        break;
+      case "contactNumber":
+        tempErrors.contactNumber =
+          value.length !== 10 || !/^\d+$/.test(value) ? "Contact number must be 10 digits." : "";
+        break;
+      case "email":
+        tempErrors.email =
+          !value.includes("@") || !value.includes(".") ? "Email must be valid." : "";
+        break;
+      case "salary":
+        const salaryValue = parseFloat(value);
+        tempErrors.salary = value.trim() === "" || isNaN(salaryValue) || salaryValue < 0 ? "Enter a valid salary value." : "";
+        break;
+
+      default:
+        break;
+    }
+    setErrors(tempErrors);
+  }
+
+  function sendData(e) {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return; // Exit if validation fails
     }
 
     const newEventPlanner = {
       Name,
       AssignedEvent,
-      SalaryForTheEvent,
+      SalaryForTheEvent: Salary,
       Email,
       ContactNumber,
     };
 
-    // Send a POST request to the server with the new event planner data
-    axios.post("http://localhost:5000/planner/add", newEventPlanner)
+    axios.post("http://localhost:5000/eventplanners/add", newEventPlanner)
       .then(() => {
-        alert("Event Planner Added"); // Alert the user on successful addition
+        alert("Event Planner Added");
         // Clear form fields after submission
         setName("");
         setAssignedEvent("");
-        setSalaryForTheEvent("");
+        setSalary("");
         setEmail("");
         setContactNumber("");
+        setErrors({ name: "", assignedEvent: "", salary: "", email: "", contactNumber: "" });
       })
       .catch((err) => {
-        alert(err); // Alert the user if there's an error in the request
+        alert(err);
       });
   }
 
@@ -54,18 +120,15 @@ export default function AddEventPlanner() {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "100vh", // Full viewport height for vertical centering
-    backgroundColor: "#f0f0f0",
-    padding: "20px",
   };
 
   const formContainerStyle = {
-    backgroundColor: "white",
-    padding: "20px",
+    backgroundColor: "#dfdede",
+    padding: "40px",
     borderRadius: "10px",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-    width: "100%", // Ensure the form container takes full width
-    maxWidth: "600px", // Adjust max width for better appearance
+    width: "100%",
+    maxWidth: "600px",
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
@@ -74,7 +137,7 @@ export default function AddEventPlanner() {
 
   const formGroupStyle = {
     marginBottom: "15px",
-    width: "100%", // Ensure form fields take full width of the form container
+    width: "100%",
   };
 
   const formControlStyle = {
@@ -88,7 +151,7 @@ export default function AddEventPlanner() {
   const buttonContainerStyle = {
     display: "flex",
     justifyContent: "flex-end",
-    width: "100%", // Ensure the button container takes full width
+    width: "100%",
   };
 
   const buttonStyle = {
@@ -102,69 +165,95 @@ export default function AddEventPlanner() {
   };
 
   return (
-    <div style={containerStyle}>
-      <form style={formContainerStyle} onSubmit={sendData}>
-        <div style={formGroupStyle}>
-          <label htmlFor="InputName">Name</label>
-          <input
-            type="text"
-            style={formControlStyle}
-            id="InputName"
-            placeholder="Enter the Name"
-            onChange={(e) => setName(e.target.value)}
-            value={Name}
-          />
-        </div>
-        <div style={formGroupStyle}>
-          <label htmlFor="InputAssignedEvent">Assigned Event</label>
-          <input
-            type="text"
-            style={formControlStyle}
-            id="InputAssignedEvent"
-            placeholder="Enter the Assigned Event"
-            onChange={(e) => setAssignedEvent(e.target.value)}
-            value={AssignedEvent}
-          />
-        </div>
-        <div style={formGroupStyle}>
-          <label htmlFor="InputSalaryForTheEvent">Salary For The Event</label>
-          <input
-            type="text"
-            style={formControlStyle}
-            id="InputSalaryForTheEvent"
-            placeholder="Enter the Salary"
-            onChange={(e) => setSalaryForTheEvent(e.target.value)}
-            value={SalaryForTheEvent}
-          />
-        </div>
-        <div style={formGroupStyle}>
-          <label htmlFor="InputEmail">Email</label>
-          <input
-            type="email"
-            style={formControlStyle}
-            id="InputEmail"
-            placeholder="Enter the Email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={Email}
-          />
-        </div>
-        <div style={formGroupStyle}>
-          <label htmlFor="InputContactNumber">Contact Number</label>
-          <input
-            type="tel"
-            style={formControlStyle}
-            id="InputContactNumber"
-            placeholder="Enter the Contact Number"
-            onChange={(e) => setContactNumber(e.target.value)}
-            value={ContactNumber}
-          />
-        </div>
-        <div style={buttonContainerStyle}>
-          <button type="submit" style={buttonStyle}>
-            Submit
-          </button>
-        </div>
-      </form>
+    <div>
+      <SideBar />
+      <div style={containerStyle}>
+        <form style={formContainerStyle} onSubmit={sendData}>
+          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Add Event Planner</h2>
+          <div style={formGroupStyle}>
+            <label htmlFor="InputName">Name</label>
+            <input
+              type="text"
+              style={formControlStyle}
+              id="InputName"
+              placeholder="Enter the Name"
+              onChange={(e) => {
+                setName(e.target.value);
+                validateField("name", e.target.value); // Validate on change
+              }}
+              value={Name}
+            />
+            {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+          </div>
+          <div style={formGroupStyle}>
+            <label htmlFor="InputAssignedEvent">Assigned Event</label>
+            <select
+              style={formControlStyle}
+              id="InputAssignedEvent"
+              onChange={(e) => {
+                setAssignedEvent(e.target.value);
+                validateField("assignedEvent", e.target.value); // Validate on change
+              }}
+              value={AssignedEvent}
+            >
+              <option value="">Select Assigned Event</option>
+              <option value="Inside Events">Inside Events</option>
+              <option value="Outside Events">Outside Events</option>
+            </select>
+            {errors.assignedEvent && <p style={{ color: "red" }}>{errors.assignedEvent}</p>}
+          </div>
+          <div style={formGroupStyle}>
+            <label htmlFor="InputSalary">Salary</label>
+            <input
+              type="text"
+              style={formControlStyle}
+              id="InputSalary"
+              placeholder="Enter the Salary"
+              onChange={(e) => {
+                setSalary(e.target.value);
+                validateField("salary", e.target.value); // Validate on change
+              }}
+              value={Salary}
+            />
+            {errors.salary && <p style={{ color: "red" }}>{errors.salary}</p>}
+          </div>
+          <div style={formGroupStyle}>
+            <label htmlFor="InputEmail">Email</label>
+            <input
+              type="email"
+              style={formControlStyle}
+              id="InputEmail"
+              placeholder="Enter the Email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                validateField("email", e.target.value); // Validate on change
+              }}
+              value={Email}
+            />
+            {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
+          </div>
+          <div style={formGroupStyle}>
+            <label htmlFor="InputContactNumber">Contact Number</label>
+            <input
+              type="tel"
+              style={formControlStyle}
+              id="InputContactNumber"
+              placeholder="Enter the Contact Number"
+              onChange={(e) => {
+                setContactNumber(e.target.value);
+                validateField("contactNumber", e.target.value); // Validate on change
+              }}
+              value={ContactNumber}
+            />
+            {errors.contactNumber && <p style={{ color: "red" }}>{errors.contactNumber}</p>}
+          </div>
+          <div style={buttonContainerStyle}>
+            <button type="submit" style={buttonStyle}>
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

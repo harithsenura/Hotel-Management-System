@@ -24,7 +24,7 @@
   border: 1px solid #ccc;
   padding: 5px;
   border-radius: 10px; /* Rounded corners */
-  width: 250px;
+  width: 300px; /* Adjusted width */
 }
 
 .search-bar input {
@@ -50,25 +50,26 @@
 }
 
 .modern-table {
-  width: 100%;
+  width: 100%; /* Reduced width */
   border-collapse: collapse;
-  margin-bottom: 20px;
-  border-radius: 10px; /* Rounded corners for table */
-  overflow: hidden; /* To prevent overflow from rounded corners */
+  margin-bottom: 20px;/* Rounded corners for table */
+  overflow: hidden;
+  border-radius: 10px; /* To prevent overflow from rounded corners */
 }
 
 .modern-table th, .modern-table td {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  text-align: center;
-  border-radius: 5px; /* Smoothen individual cell borders */
+  padding: 8px 10px; /* Reduced padding */
+  text-align: center;/* Smoothen individual cell borders */
+  font-size: 14px; 
+  border: 1px solid rgba(80, 79, 79, 0.149);
+  /* Reduced font size */
 }
 
 .modern-table th {
   background-color: #800000;
   color: white;
   font-weight: bold;
-  border-radius: 5px 5px 0 0; /* Top-left and top-right corners */
+  /* Top-left and top-right corners */
 }
 
 .modern-table td {
@@ -93,7 +94,7 @@
   background-color: #fb0800;
   color: #fff;
   border: none;
-  padding: 7px 8px;
+  padding: 4px 6px; /* Reduced padding */
   cursor: pointer;
   border-radius: 5px; /* Rounded corners for button */
 }
@@ -101,7 +102,7 @@
   background-color: #0a8437;
   color: #fff;
   border: none;
-  padding: 3px 5px;
+  padding: 4px 8px; /* Reduced padding */
   cursor: pointer;
   border-radius: 5px; /* Rounded corners for button */
 }
@@ -175,6 +176,7 @@
   cursor: pointer;
   border-radius: 10px; /* Rounded corners for report button */
 }
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -202,13 +204,5 @@
   background: none;
   border: none;
   font-size: 20px;
-  cursor: pointer;
-}
-
-.update-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px;
   cursor: pointer;
 }

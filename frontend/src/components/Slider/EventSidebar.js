@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from '../../images/company.png'
 
 function SideBar() {
   const hoverStyle = {
@@ -36,7 +37,7 @@ function SideBar() {
   const logoStyle = {
     color: '#fff',
     textAlign: 'center',  // Center align text
-    lineHeight: '1.2',
+    lineHeight: '1.5',
     margin: '20px auto',  // Center the logo with margin
     fontSize: '1.5em',  // Increased text size
   };
@@ -70,14 +71,27 @@ function SideBar() {
       {/* Sidebar */}
       <div style={{ width: '250px', height: '100vh', backgroundColor: '#1a1a1a', padding: '15px', position: 'fixed', top: 0, left: 0 }}>
         <div style={logoStyle}>
-          Cinnamon <br />
-          <span style={redTextStyle}>Red</span> <br />
-          Colombo
+        <img src={logo} alt="Cinnamon Red Logo" style={{ width: "100px", height: "auto" }} /> {/* Adjust width as needed */}
+
         </div>
         <ul style={{ listStyleType: 'none', padding: '30px 0 0 0' }}>
+        <li>
+            <Link
+              to="/checkout"
+              style={defaultStyle}
+              onMouseOver={(e) => {
+                Object.assign(e.currentTarget.style, hoverStyle);
+              }}
+              onMouseOut={(e) => {
+                Object.assign(e.currentTarget.style, defaultStyle);
+              }}
+            >
+              Dashboard
+            </Link>
+          </li>
           <li>
             <Link
-              to="/customers"
+              to="/events"
               style={defaultStyle}
               onMouseOver={(e) => {
                 Object.assign(e.currentTarget.style, hoverStyle);
@@ -91,7 +105,7 @@ function SideBar() {
           </li>
           <li>
             <Link
-              to="/customers/add"
+              to="/events/add"
               style={defaultStyle}
               onMouseOver={(e) => {
                 Object.assign(e.currentTarget.style, hoverStyle);
@@ -100,12 +114,12 @@ function SideBar() {
                 Object.assign(e.currentTarget.style, defaultStyle);
               }}
             >
-              Add Customer
+              Add Event
             </Link>
           </li>
           <li>
             <Link
-              to="/checkout"
+              to="/eventplanner/add"
               style={defaultStyle}
               onMouseOver={(e) => {
                 Object.assign(e.currentTarget.style, hoverStyle);
@@ -114,12 +128,12 @@ function SideBar() {
                 Object.assign(e.currentTarget.style, defaultStyle);
               }}
             >
-              Check-Out
+              Add Event Planner
             </Link>
           </li>
           <li>
             <Link
-              to="/rooms"  // Link to RoomList
+              to="/eventplanners"
               style={defaultStyle}
               onMouseOver={(e) => {
                 Object.assign(e.currentTarget.style, hoverStyle);
@@ -128,23 +142,10 @@ function SideBar() {
                 Object.assign(e.currentTarget.style, defaultStyle);
               }}
             >
-              Room Availability
+              All Event Planners
             </Link>
           </li>
-          <li>
-            <Link
-              to="/rooms/add"  // Link to AddRoom page
-              style={defaultStyle}
-              onMouseOver={(e) => {
-                Object.assign(e.currentTarget.style, hoverStyle);
-              }}
-              onMouseOut={(e) => {
-                Object.assign(e.currentTarget.style, defaultStyle);
-              }}
-            >
-              Add Room
-            </Link>
-          </li>
+          
           <li>
             <Link
               to="/"  // Link to Dashboard page on Log Out

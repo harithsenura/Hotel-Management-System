@@ -29,7 +29,7 @@ app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/events', eventsRoute);
-app.use('/planner', eventPlannerRoute);
+app.use('/eventplanners', eventPlannerRoute);
 
 const PORT = 5000;
 app.listen(PORT, () => {

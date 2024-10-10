@@ -41,6 +41,20 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+// GET Route to search for event planners by name
+router.get('/search', async (req, res, next) => {
+    const { name } = req.query; // Get the name from the query
+    try {
+        const eventPlanners = await EventPlanner.find({
+            Name: { $regex: name, $options: 'i' } // Case insensitive search
+        });
+        return res.status(200).json(eventPlanners);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 // GET Route to retrieve an event by ID
 router.get('/:id', async (req, res, next) => {
     try {
