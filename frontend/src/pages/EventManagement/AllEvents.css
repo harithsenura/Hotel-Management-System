@@ -1,0 +1,214 @@
+/* General styles for content */
+.content-container {
+  padding: 20px;
+  margin-left: 250px; /* Adjust for sidebar */
+}
+
+.page-title {
+  text-align: center;
+  color: #333;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+/* Search Bar */
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 10px; /* Rounded corners */
+  width: 250px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  flex: 1;
+  border-radius: 10px 0 0 10px; /* Rounded corners for input */
+}
+
+.search-bar button {
+  background-color: #800000;
+  color: #fff;
+  border: none;
+  padding: 5px;
+  border-radius: 0 10px 10px 0; /* Rounded corners for button */
+  cursor: pointer;
+}
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  border-radius: 10px; /* Rounded corners for table */
+  overflow: hidden; /* To prevent overflow from rounded corners */
+}
+
+.modern-table th, .modern-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+  border-radius: 5px; /* Smoothen individual cell borders */
+}
+
+.modern-table th {
+  background-color: #800000;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px 5px 0 0; /* Top-left and top-right corners */
+}
+
+.modern-table td {
+  background-color: #f9f9f9;
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Buttons */
+.view-link {
+  color: #800000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.delete-button {
+  background-color: #fb0800;
+  color: #fff;
+  border: none;
+  padding: 7px 8px;
+  cursor: pointer;
+  border-radius: 5px; /* Rounded corners for button */
+}
+.update-button {
+  background-color: #0a8437;
+  color: #fff;
+  border: none;
+  padding: 3px 5px;
+  cursor: pointer;
+  border-radius: 5px; /* Rounded corners for button */
+}
+
+/* Confirm Dialog */
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-dialog {
+  background-color: white;
+  padding: 20px;
+  border-radius: 15px; /* Smooth, rounded dialog */
+  text-align: center;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.confirm-delete, .cancel-delete {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px; /* Rounded corners for dialog buttons */
+}
+
+.confirm-delete {
+  background-color: #d9534f;
+  color: white;
+}
+
+.cancel-delete {
+  background-color: #5bc0de;
+  color: white;
+}
+
+/* Alert */
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  border: 2px solid rgb(0, 255, 0);
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  padding: 15px;
+  border-radius: 8px; /* Rounded corners for alert */
+}
+
+/* Report Button */
+.report-button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.generate-report-button {
+  background-color: #800000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px; /* Rounded corners for report button */
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 500px;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.update-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}

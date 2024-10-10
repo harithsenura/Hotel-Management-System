@@ -1,0 +1,33 @@
+.SearchBar {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+  }
+  
+  .SearchBar input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    font-size: 16px;
+    outline: none;
+  }
+  
+  .SearchBar input::placeholder {
+    color: #ccc;
+  }
+  
+  .SearchBar .searchIcon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    color: #ccc;
+    cursor: pointer;
+  }
