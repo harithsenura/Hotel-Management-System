@@ -11,12 +11,12 @@ import Title from '../../components/Title/Title';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import OrderItemsList from '../../components/OrderItemsList/orderItemsList';
-import Map from '../../components/Map/Map';
+
 export default function CheckoutPage() {
     const { cart } = useCart();
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [order, setOrder] = useState({ ...cart });
+    const [order, setOrder] = useState({ ...cart });  // No addressLatLng anymore
 
     const {
         register,
@@ -24,12 +24,7 @@ export default function CheckoutPage() {
         handleSubmit,
     } = useForm();
 
-    const submit = async data => {
-        if (!order.addressLatLng) {
-            toast.warning('Please select your location on the map');
-            return;
-        }
-
+    const submit = async (data) => {
         await createOrder({ ...order, name: data.name, address: data.address });
         navigate('/payment');
     };
@@ -54,17 +49,6 @@ export default function CheckoutPage() {
                         />
                     </div>
                     <OrderItemsList order={order} />
-                </div>
-
-                <div>
-                    <Title title="Choose Your Location" fontSize="1.6rem" />
-                    <Map
-                        location={order.addressLatLng}
-                        onChange={latlng => {
-                            console.log(latlng);
-                            setOrder({ ...order, addressLatLng: latlng });
-                        }}
-                    />
                 </div>
 
                 <div className={classes.buttons_container}>

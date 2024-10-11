@@ -298,11 +298,13 @@ export default function AddEvent() {
               </div>
 
               {inputError && <p className="error-message">{inputError}</p>}
-
-              <button type="submit" className="submit-button">
-                Submit
-              </button>
+              
             </form>
+            <div className="submit-container">
+                <button type="submit" className="submit-button">
+                  Submit
+                </button>
+              </div>
           </div>
         </div>
       </div>

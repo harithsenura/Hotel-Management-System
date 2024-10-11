@@ -1,0 +1,69 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    margin-left: 250px;
+    margin-top: 10px;
+  }
+  
+  .event-section {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    
+  }
+  
+  .current-month {
+    border-color: #f10f0f;
+    background-color: #eac6c6;
+    
+  }
+  
+  .upcoming {
+    border-color: #000cf9;
+    background-color: #bbd4ee;
+
+  }
+  
+  .event-table-current {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .event-table-upcomming {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .event-table-upcomming th {
+    border: none;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .event-table-current td{
+    border: none;
+    padding: 10px;
+    text-align: left;
+  }
+  .event-table-upcomming td {
+    border: none;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .event-table-current th{
+    border: none;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .event-table-upcomming th {
+    background-color: #a4bdf4;
+    font-weight: bold;
+  }
+  .event-table-current th {
+    background-color: #f09e9e;
+    font-weight: bold;
+  }
+  

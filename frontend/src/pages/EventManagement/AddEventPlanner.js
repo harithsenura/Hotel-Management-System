@@ -118,22 +118,25 @@ export default function AddEventPlanner() {
 
   const containerStyle = {
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "center",  // Horizontally centers the form
+    alignItems: "center",      // Vertically centers the form
+    minHeight: "100vh",        // Makes the container take up the full viewport height
   };
-
+  
   const formContainerStyle = {
     backgroundColor: "#dfdede",
     padding: "40px",
     borderRadius: "10px",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
     width: "100%",
+    marginLeft:"250px",
     maxWidth: "600px",
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   };
+  
 
   const formGroupStyle = {
     marginBottom: "15px",
@@ -150,7 +153,7 @@ export default function AddEventPlanner() {
 
   const buttonContainerStyle = {
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "center",
     width: "100%",
   };
 
@@ -162,6 +165,7 @@ export default function AddEventPlanner() {
     borderRadius: "5px",
     cursor: "pointer",
     fontSize: "16px",
+    width:"200px"
   };
 
   return (

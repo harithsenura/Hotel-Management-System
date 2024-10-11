@@ -11,7 +11,7 @@ import PaymentPage from './pages/Payment/PaymentPage'
 import ProfilePage from './pages/Profile/ProfilePage'
 import OrdersPage from './pages/Orders/OrdersPage'
 import Dashboard from './pages/Dashboard/Dashboard'
-import Edashboard from '../src/pages/EventManagement/DashBoard'
+import HomeDashboard from './pages/EventManagement/DashBoard'
 import FoodsAdminPage from './pages/FoodsAdminPage/FoodsAdminPage'
 import AdminRoute from './components/AdminRoute/AdminRoute';
 import FoodEditPage from './pages/FoodEdit/FoodEditPage'
@@ -22,6 +22,15 @@ import AllEventPlanners from './pages/EventManagement/AllEventPlanners'
 import EventProfileUpdate from './pages/EventManagement/PlannerProfile'
 import UpdatePlanner from './pages/EventManagement/UpdatePlanner'
 import UpdateEvent from './pages/EventManagement/UpdateEvent'
+import EventDashboard from './pages/EventManagement/EventDashBoard'
+import Eventlogin from './pages/EventManagement/login'
+import InItems from './pages/InventoryManagement/AddItems'
+import InStockManage from './pages/InventoryManagement/StockManage'
+import InUpdateItems from './pages/InventoryManagement/UpdateItems'
+import InUpdateOrders from './pages/InventoryManagement/UpdateOrders'
+import InDashboard from './pages/InventoryManagement/Dashboard'
+import InAddOrders from './pages/InventoryManagement/AddOrders'
+
 
 export default function AppRoutes() {
   return (
@@ -33,13 +42,26 @@ export default function AppRoutes() {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+
+      {/* Event Management */}
       <Route path="/events" element={<AllEvents />} /> {/* Default route */}
       <Route path="/events/add" element={<AddEvent />} /> {/* Route to add event */}
       <Route path="/eventplanner/add" element={<AddEventPlanner />} /> {/* Add Event Planner */}
       <Route path="/eventplanners" element={<AllEventPlanners />} /> {/* View All Event Planners */}
       <Route path="/planner/:id" element={<UpdatePlanner />} /> {/* Update specific event planner */}
       <Route path="/events/:id" element={<UpdateEvent />} /> {/* Update event profile */}
-      <Route path="/" element={<Edashboard />} /> {/* Fixed closing tag */}
+      <Route path="/" element={<HomeDashboard />} /> {/* Fixed closing tag */}
+      <Route path="/eventdashboard" element={<EventDashboard />} />
+      <Route path="/eventlogin" element={<Eventlogin />} />
+
+      {/* Inventory Management */}
+      <Route path="/inventory/additem" element={<InItems />} />
+      <Route path="/inventory/manageitems" element={<InStockManage />} />
+      <Route path="/update-items/:id" element={<InUpdateItems />} /> 
+      <Route path="/update-orders/:id" element={<InUpdateOrders />} />
+      <Route path="/inventory/addorder" element={<InAddOrders />} />
+      <Route path="/inventory/dashobard" element={<InDashboard />} />
+
 
       <Route
         path="/checkout"

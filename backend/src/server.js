@@ -9,6 +9,8 @@ import orderRouter from './routers/order.router.js';
 import uploadRouter from './routers/upload.router.js';
 import eventsRoute from './routers/eventsRoute.js';
 import eventPlannerRoute from './routers/eventPlannerRoute.js';
+import istockRouter from './routers/InventorySockRoute.js'
+import iorderRouter from './routers/InventoryOrderRoute.js'
 
 
 import { dbconnect } from './config/database.config.js';
@@ -30,6 +32,8 @@ app.use('/api/orders', orderRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/events', eventsRoute);
 app.use('/eventplanners', eventPlannerRoute);
+app.use('/api/inventory/stocks', istockRouter);
+app.use('/api/inventory/orders', iorderRouter);
 
 const PORT = 5000;
 app.listen(PORT, () => {

@@ -147,7 +147,7 @@ export default function PlannerList() {
   return (
     <div style={containerStyle}>
       <SideBar />
-      <div style={{ marginLeft: "300px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ marginLeft: "280px", display: "flex", flexDirection: "column", alignItems: "center",marginTop:"50px" }}>
         <h1 style={headerStyle}>All Event Planners</h1>
   
         {/* Search Bar */}
@@ -289,7 +289,7 @@ const tableContainerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  margin: "20px 0", // Add margin for spacing
+  margin: "10px 0", // Add margin for spacing
 };
 
 const containerStyle = {
@@ -307,7 +307,7 @@ const headerStyle = {
 };
 
 const tableStyle = {
-  width: "100%", // Adjust table width as needed
+  width: "1000px", // Adjust table width as needed
   borderCollapse: "collapse",
   fontSize: "14px",
 
@@ -395,3 +395,4 @@ const confirmDialogButtonStyle = {
   borderRadius: "4px",
   cursor: "pointer",
 };
+

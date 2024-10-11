@@ -1,16 +1,19 @@
 .add-event-container {
     display: flex;
-    flex-direction: row; /* Change to row for horizontal layout */
+    flex-direction: row;
 }
 
 .form-container {
     flex: 1;
+    margin-left: 200px;
+    max-width: 800px;
     padding: 20px;
     background-color: #dfdede;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin: 20px,-50px;
-    overflow: auto; /* Allow scrolling for overflow */
+    margin-Top: 60px; /* Correct margin */
+    overflow: auto; 
+/* Allow scrolling for overflow */
 }
 
 h2 {
@@ -95,6 +98,13 @@ h2 {
     font-size: 0.9em;
 }
 
+/* Centering the submit button */
+.submit-container {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    margin-top: 20px;
+}
+
 .submit-button {
     background-color: #b30000;
     color: white;
@@ -102,8 +112,8 @@ h2 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 200px;
     transition: background-color 0.3s;
-    flex-basis: 100%; /* Full width for submit button */
 }
 
 .submit-button:hover {

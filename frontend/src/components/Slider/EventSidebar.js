@@ -71,13 +71,18 @@ function SideBar() {
       {/* Sidebar */}
       <div style={{ width: '250px', height: '100vh', backgroundColor: '#1a1a1a', padding: '15px', position: 'fixed', top: 0, left: 0 }}>
         <div style={logoStyle}>
-        <img src={logo} alt="Cinnamon Red Logo" style={{ width: "100px", height: "auto" }} /> {/* Adjust width as needed */}
-
+          <a href="/" style={{ textDecoration: "none" }}>
+            <img
+              src={logo}
+              alt="Cinnamon Red Logo"
+              style={{ width: "100px", height: "auto" }}
+            />
+          </a>
         </div>
         <ul style={{ listStyleType: 'none', padding: '30px 0 0 0' }}>
-        <li>
+          <li>
             <Link
-              to="/checkout"
+              to="/eventdashboard"
               style={defaultStyle}
               onMouseOver={(e) => {
                 Object.assign(e.currentTarget.style, hoverStyle);
@@ -145,7 +150,7 @@ function SideBar() {
               All Event Planners
             </Link>
           </li>
-          
+
           <li>
             <Link
               to="/"  // Link to Dashboard page on Log Out
@@ -165,13 +170,10 @@ function SideBar() {
 
       {/* Header Title Bar */}
       <div style={titleBarStyle}>
-        <h1 style={{ margin: 0, padding: 0 }}>Event Management</h1>
+        <h1 style={{ margin: 0, padding: 0 }}>Welcome to Admin Pannel</h1>
       </div>
 
-      {/* Content Area */}
-      <div style={contentStyle}>
-        {/* Content like tables and other sections go here */}
-      </div>
+
     </div>
   );
 }

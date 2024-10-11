@@ -88,7 +88,7 @@ const Dashboard = () => {
         />
         <Card title="Employee Management" content="Manage your employees" Icon={FaUserTie}  />
         <Card title="Finance Management" content="Track and manage finances" Icon={FaMoneyBillWave} />
-        <Card title="Inventory Management" content="Manage your inventory" Icon={FaWarehouse} />
+        <Card title="Inventory Management" content="Manage your inventory" Icon={FaWarehouse}onClick={() => navigate('/inventory/dashobard')} />
       </div>
 
       {/* Second Row of Cards */}
@@ -96,7 +96,7 @@ const Dashboard = () => {
         <Card title="Supplier Management" content="Manage supplier relationships" Icon={FaTruck} />
         <Card title="Restaurant Management" content="Oversee restaurant operations" Icon={FaUtensils} onClick={() => navigate('/food')}/>
         <Card title="Bar Management" content="Manage bar orders and inventory" Icon={FaCocktail} onClick={() => navigate('/barlogin')}  />
-        <Card title="Event Management" content="Organize and track events" Icon={FaCalendarAlt}  onClick={() => navigate('/events')}/>
+        <Card title="Event Management" content="Organize and track events" Icon={FaCalendarAlt}  onClick={() => navigate('/eventlogin')}/>
       </div>
     </div>
   );
