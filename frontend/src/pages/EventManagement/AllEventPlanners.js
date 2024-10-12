@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import logo from '../../images/company.png';
-import SideBar from "../../components/Slider/EventSidebar"; // Import the sidebar component
+import SideBar from "../../components/SideBar/EventSidebar"; // Import the sidebar component
 
 export default function PlannerList() {
   const [planners, setPlanners] = useState([]);

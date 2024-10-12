@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import SideBar from "../../components/Slider/EventSidebar";
+import SideBar from "../../components/SideBar/EventSidebar";
 import "./AddEvent.css";
 
 export default function AddEvent() {

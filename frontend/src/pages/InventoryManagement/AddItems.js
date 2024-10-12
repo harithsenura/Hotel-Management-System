@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import SideBar from "../../components/Slider/InventoryManagementSidebar";
+import SideBar from "../../components/SideBar/InventoryManagementSidebar";
 import { toast } from "react-toastify";
 import { delay } from "framer-motion";
 
@@ -128,7 +128,7 @@ export default function AddItems({ onItemAdded }) {
         setInStock("");
         setDate("");
         setStatusOfItem("");
-    
+
 
         // Call callback function if it exists
         if (typeof onItemAdded === "function") {
@@ -150,6 +150,7 @@ export default function AddItems({ onItemAdded }) {
             textAlign: "center",
             marginTop: "50px",
             fontSize: 32,
+            marginLeft: "200px"
           }}
         >
           Add New Item
@@ -260,7 +261,7 @@ export default function AddItems({ onItemAdded }) {
             {/* In stock input */}
             <div className="form-group">
               <label htmlFor="stock" className="form-label">
-                In Stock
+                Stock Amount
               </label>
               <input
                 type="number"

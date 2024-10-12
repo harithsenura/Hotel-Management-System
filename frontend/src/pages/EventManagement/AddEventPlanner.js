@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import SideBar from "../../components/Slider/EventSidebar";
+import SideBar from "../../components/SideBar/EventSidebar";
 
 export default function AddEventPlanner() {
   const [Name, setName] = useState("");

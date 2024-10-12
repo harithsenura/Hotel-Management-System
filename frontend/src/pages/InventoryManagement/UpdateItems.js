@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import SideBar from "../../components/Slider/InventoryManagementSidebar";
+import SideBar from "../../components/SideBar/InventoryManagementSidebar";
 
 export default function UpdateItems({ item, onSave, onClose }) {
   const { id } = useParams(); // Get the item ID from the URL parameters

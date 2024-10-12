@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from '../../images/company.png'
 
-
-function Header() {
+function SideBar() {
   const hoverStyle = {
     backgroundColor: '#b30000',  // Darker red for hover
     color: '#fff',
@@ -37,7 +37,7 @@ function Header() {
   const logoStyle = {
     color: '#fff',
     textAlign: 'center',  // Center align text
-    lineHeight: '1.2',
+    lineHeight: '1.5',
     margin: '20px auto',  // Center the logo with margin
     fontSize: '1.5em',  // Increased text size
   };
@@ -67,45 +67,87 @@ function Header() {
   };
 
   return (
-    
     <div>
       {/* Sidebar */}
       <div style={{ width: '250px', height: '100vh', backgroundColor: '#1a1a1a', padding: '15px', position: 'fixed', top: 0, left: 0 }}>
         <div style={logoStyle}>
-          Cinnamon <br />
-          <span style={redTextStyle}>Red</span> <br />
-          Colombo
+          <a href="/" style={{ textDecoration: "none" }}>
+            <img
+              src={logo}
+              alt="Cinnamon Red Logo"
+              style={{ width: "100px", height: "auto" }}
+            />
+          </a>
         </div>
         <ul style={{ listStyleType: 'none', padding: '30px 0 0 0' }}>
-        <li>
-           <a href="/send" style={defaultStyle}>Add Items Details</a>
+          <li>
+            <Link
+              to="/eventdashboard"
+              style={defaultStyle}
+              onMouseOver={(e) => {
+                Object.assign(e.currentTarget.style, hoverStyle);
+              }}
+              onMouseOut={(e) => {
+                Object.assign(e.currentTarget.style, defaultStyle);
+              }}
+            >
+              Dashboard
+            </Link>
           </li>
           <li>
-           <a href="/" style={defaultStyle}>Manage Stocks</a>
+            <Link
+              to="/finance/statement"
+              style={defaultStyle}
+              onMouseOver={(e) => {
+                Object.assign(e.currentTarget.style, hoverStyle);
+              }}
+              onMouseOut={(e) => {
+                Object.assign(e.currentTarget.style, defaultStyle);
+              }}
+            >
+              Finance Document
+            </Link>
           </li>
           <li>
-            <a href="/orders" style={defaultStyle}>Add Order Details</a>
+            <Link
+              to="/finance/pettycash"
+              style={defaultStyle}
+              onMouseOver={(e) => {
+                Object.assign(e.currentTarget.style, hoverStyle);
+              }}
+              onMouseOut={(e) => {
+                Object.assign(e.currentTarget.style, defaultStyle);
+              }}
+            >
+              Petty Cash Stateme
+            </Link>
           </li>
+
           <li>
-            <a href="/manage" style={defaultStyle}>Manage Orders</a>
-          </li>
-          <li>
-            <a href="/dash" style={defaultStyle}>Sign Out</a>
+            <Link
+              to="/"  // Link to Dashboard page on Log Out
+              style={defaultStyle}
+              onMouseOver={(e) => {
+                Object.assign(e.currentTarget.style, hoverStyle);
+              }}
+              onMouseOut={(e) => {
+                Object.assign(e.currentTarget.style, defaultStyle);
+              }}
+            >
+              Log Out
+            </Link>
           </li>
         </ul>
       </div>
 
       {/* Header Title Bar */}
       <div style={titleBarStyle}>
-        <h1 style={{ margin: 0, padding: 0 }}>Inventory Management</h1>
+        <h1 style={{ margin: 0, padding: 0 }}>Welcome to Admin Pannel</h1>
       </div>
 
-      {/* Content Area */}
-      <div style={contentStyle}>
-        {/* Content like tables and other sections go here */}
-      </div>
+
     </div>
   );
 }
 
-export default Header;
+export default SideBar;

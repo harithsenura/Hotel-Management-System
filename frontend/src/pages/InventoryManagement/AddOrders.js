@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import SideBar from "../../components/Slider/InventoryManagementSidebar";
+import SideBar from "../../components/SideBar/InventoryManagementSidebar";
 
 export default function AddOrders({ onOrderAdded }) {
   const [name, setname] = useState("");
@@ -8,26 +8,80 @@ export default function AddOrders({ onOrderAdded }) {
   const [date, setdate] = useState("");
   const [noOfItems, setnoOfitems] = useState("");
   const [errors, setErrors] = useState({});
+  const [orders, setOrders] = useState([]); // Ensure orders is initialized as an empty array
+
+  // Fetch orders from API on component mount
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/inventory/orders/")
+      .then((response) => {
+        // Check if the response contains the 'data' array
+        if (response.data && Array.isArray(response.data.data)) {
+          setOrders(response.data.data); // Set orders from the 'data' array
+        } else {
+          console.error("API response does not contain a 'data' array:", response.data);
+          setOrders([]); // Fallback to an empty array if the structure is unexpected
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
+      });
+  }, []);
+  
+  // Fetch orders from API
+const fetchOrders = () => {
+  axios
+      .get("http://localhost:5000/api/inventory/orders/")
+      .then((response) => {
+          // Check if the response contains the 'data' array
+          if (response.data && Array.isArray(response.data.data)) {
+              setOrders(response.data.data); // Set orders from the 'data' array
+          } else {
+              console.error("API response does not contain a 'data' array:", response.data);
+              setOrders([]); // Fallback to an empty array if the structure is unexpected
+          }
+      })
+      .catch((error) => {
+          console.error("Error fetching orders:", error);
+      });
+};
+
+// Fetch orders when the component mounts
+useEffect(() => {
+  fetchOrders();
+}, []);
+
 
   function validateForm() {
     let formErrors = {};
     let valid = true;
 
+    // Name validation
     if (!name.trim()) {
       formErrors.name = "Order name is required.";
       valid = false;
     }
 
+    // Supplier validation
     if (!supplier.trim()) {
       formErrors.supplier = "Supplier name is required.";
       valid = false;
     }
 
+    // Date validation
     if (!date) {
       formErrors.date = "Date is required.";
       valid = false;
+    } else {
+      const today = new Date();
+      const selectedDate = new Date(date);
+      if (selectedDate < today.setHours(0, 0, 0, 0)) {
+        formErrors.date = "Please select today or a future date.";
+        valid = false;
+      }
     }
 
+    // No of items validation
     if (!noOfItems || noOfItems <= 0) {
       formErrors.noOfItems = "Number of items should be a positive number.";
       valid = false;
@@ -39,7 +93,7 @@ export default function AddOrders({ onOrderAdded }) {
 
   function sendData(e) {
     e.preventDefault();
-    
+
     if (!validateForm()) {
         return;
     }
@@ -61,6 +115,9 @@ export default function AddOrders({ onOrderAdded }) {
             setsupplier("");
             setdate("");
             setnoOfitems("");
+
+            // Fetch the updated list of orders
+            fetchOrders(); // Call the function to fetch orders
         })
         .catch((err) => {
             console.error("Error:", err.response?.data); // Log the error response for debugging
@@ -72,9 +129,33 @@ export default function AddOrders({ onOrderAdded }) {
     <div>
       <SideBar />
       <div>
-        {/* Add title here */}
-        <h1 style={{ textAlign: "center", marginLeft: "250px", marginTop: "0px", fontSize: 32 }}>Add Order Details</h1>
-
+        <div className="orders-container">
+          <h2 style={{ textAlign: "center", marginTop: "20px",marginLeft:"250px", fontSize: 28 }}>Previous Orders</h2>
+          <div className="order-card">
+            {orders.length > 0 ? (
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                <thead>
+                  <tr>
+                    <th>Order Name</th>
+                    <th>Supplier</th>
+                    <th>Status</th>
+                  </tr>
+                </thead><br/>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order._id}>
+                      <td>{order.orderName}</td>
+                      <td>{order.supplier}</td>
+                      <td>{order.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p style={{ textAlign: "center" }}>No orders found</p>
+            )}
+          </div>
+          </div>
         <div
           style={{
             maxWidth: "800px",
@@ -124,8 +205,30 @@ export default function AddOrders({ onOrderAdded }) {
             justify-content: center;
             margin-top: 20px;
           }
+          .orders-container {
+            margin-top: 50px;
+          }
+          .order-card {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            margin-left:500px;
+            max-width:800px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
+          .order-card h3 {
+            margin: 0;
+            font-size: 20px;
+          }
+          .order-card p {
+            margin: 5px 0;
+          }
         `}
           </style>
+          <h1 style={{ textAlign: "center", fontSize: 32 }}>Add Order Details</h1>
+
           <form onSubmit={sendData}>
             <div className="form-group">
               <label htmlFor="Name" className="form-label">
@@ -194,6 +297,8 @@ export default function AddOrders({ onOrderAdded }) {
             </div>
           </form>
         </div>
+
+        
       </div>
     </div>
   );

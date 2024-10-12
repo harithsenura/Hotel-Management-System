@@ -5,7 +5,7 @@ import "jspdf-autotable";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import SideBar from "../../components/Slider/EventSidebar.js";
+import SideBar from "../../components/SideBar/EventSidebar.js";
 import "./AllEvents.css"; // External styles
 import logo from '../../images/company.png';
 

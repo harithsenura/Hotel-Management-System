@@ -6,7 +6,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import UpdateItems from "../InventoryManagement/UpdateItems"; // Ensure the path is correct
 import logo from "../images/company.png"
-import SideBar from "../../components/Slider/InventoryManagementSidebar";
+import SideBar from "../../components/SideBar/InventoryManagementSidebar";
 
 const Modal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;

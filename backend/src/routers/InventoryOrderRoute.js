@@ -20,12 +20,20 @@ const validateOrder = (req, res, next) => {
 router.post('/send', validateOrder, async (req, res, next) => {
     try {
         console.log('Received data:', req.body); // Debugging: log incoming data
-        const newOrder = await Orders.create(req.body);
+        
+        // Add the status attribute with a default value of "pending"
+        const orderData = {
+            ...req.body, // Spread the incoming order data
+            status: "pending..." // Set default status as "pending"
+        };
+
+        const newOrder = await Orders.create(orderData); // Create the order with the new data
         return res.status(201).json(newOrder);
     } catch (error) {
         next(error);
     }
 });
+
 
 // GET Route to retrieve all orders
 router.get('/', async (req, res, next) => {

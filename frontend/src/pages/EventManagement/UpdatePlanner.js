@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import SideBar from "../../components/Slider/EventSidebar.js"; // Import the sidebar
+import SideBar from "../../components/SideBar/EventSidebar.js"; // Import the sidebar
 import { toast } from "react-toastify"; // Import toast for notifications
 
 export default function UpdatePlanner() {

@@ -9,7 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import SideBar from "../../components/Slider/InventoryManagementSidebar"; // Ensure the path is correct
+import SideBar from "../../components/SideBar/InventoryManagementSidebar"; // Ensure the path is correct
 
 const Dashboard = () => {
   const [stockItems, setStockItems] = useState([]);

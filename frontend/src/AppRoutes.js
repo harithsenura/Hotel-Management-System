@@ -30,6 +30,10 @@ import InUpdateItems from './pages/InventoryManagement/UpdateItems'
 import InUpdateOrders from './pages/InventoryManagement/UpdateOrders'
 import InDashboard from './pages/InventoryManagement/Dashboard'
 import InAddOrders from './pages/InventoryManagement/AddOrders'
+import Inventorylogin from './pages/InventoryManagement/InventoryLogin'
+import FinanceStatement from './pages/FinanceManagement/IncomeTable'
+import PettyCash from './pages/FinanceManagement/PettyCashTable'
+
 
 
 export default function AppRoutes() {
@@ -61,7 +65,12 @@ export default function AppRoutes() {
       <Route path="/update-orders/:id" element={<InUpdateOrders />} />
       <Route path="/inventory/addorder" element={<InAddOrders />} />
       <Route path="/inventory/dashobard" element={<InDashboard />} />
+      <Route path="/inventorylogin" element={<Inventorylogin />} />
 
+      {/* Finance Management */}
+      <Route path="/finance/statement" element={<FinanceStatement />} />
+      <Route path="/finance/pettycash" element={<PettyCash/>} />
+      
 
       <Route
         path="/checkout"

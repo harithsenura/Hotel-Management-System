@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Dashboard.css";
-import SideBar from "../../components/Slider/EventSidebar";
+import SideBar from "../../components/SideBar/EventSidebar";
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]); // Ensure it's initialized as an empty array

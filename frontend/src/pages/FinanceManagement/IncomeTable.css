@@ -1,0 +1,115 @@
+.income-table-container {
+    margin-left: 250px;
+    margin-top: 20px;
+  }
+  
+  .statement-buttons {
+    display: flex;
+    justify-content: center; /* Align buttons horizontally */
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  .button {
+    margin: 0 5px;
+    padding: 10px;
+    width: 150px; /* Adjusted the width to balance them inside the table */
+    background-color: #b30000;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #d70505;
+  }
+  
+  .statement-header {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+  }
+  
+  .statement-content {
+    position: relative;
+    margin: 0 auto;
+    width: 1000px;
+    background-color: rgb(252, 243, 243);
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners for content */
+    z-index: 1; /* Ensure content stays on top */
+  }
+  
+  .statement-content::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(to left, #b3000027, rgba(0, 0, 0, 0.073)); 
+    border-radius: 12px; 
+    z-index: -1; 
+  }
+  
+  
+  table.income-table {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    margin-left: auto; /* Center the table horizontally */
+    margin-right: auto; /* Center the table horizontally */
+    width: 100%;
+    
+    
+  }
+  
+  table.income-table th,
+  table.income-table td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  table.income-table th {
+    border-bottom: 2px solid #ffffff9c;
+  }
+  
+  .description {
+    text-align: left;
+  }
+  
+  .total-row {
+    border-top: 2px solid #ffffff9c;
+  }
+ 
+  
+  .net-total-row {
+    border-top: 2px solid #ffffff9c;
+    border-bottom: 3px solid #ffffff9c;
+  }
+  
+  .amount {
+    width: 20%;
+  }
+  
+  .bold-text {
+    font-weight: bold;
+  }
+  
+  .download-button {
+    margin-left:255px;
+    padding: 10px;
+    width: 150px; /* Adjusted the width to balance them inside the table */
+    background-color: #b30000;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    cursor: pointer;
+  }
+  
+  .download-button:hover {
+    background-color: #d70505;
+  }
+  
