@@ -37,6 +37,13 @@ import FinanceDashboard from './pages/FinanceManagement/Dashboard'
 import IncomeForm from './pages/FinanceManagement/IncomeForm'
 import FinanceLogin from './pages/FinanceManagement/login'
 
+import SupplyerHeader from './components/Supplyer/SupplyerHeader';
+import SupplyerLogin from './components/Supplyer/SupplyerLogin';
+import SupplierProfile from "./components/Supplyer/SupplierProfile";
+import ManagerProfile from "./components/Supplyer/ManagerProfile";
+import AddSupplier from "./components/Supplyer/AddSupplier";
+import AddManager from "./components/Supplyer/AddManager";
+
 
 
 export default function AppRoutes() {
@@ -64,7 +71,7 @@ export default function AppRoutes() {
       {/* Inventory Management */}
       <Route path="/inventory/additem" element={<InItems />} />
       <Route path="/inventory/manageitems" element={<InStockManage />} />
-      <Route path="/update-items/:id" element={<InUpdateItems />} /> 
+      <Route path="/update-items/:id" element={<InUpdateItems />} />
       <Route path="/update-orders/:id" element={<InUpdateOrders />} />
       <Route path="/inventory/addorder" element={<InAddOrders />} />
       <Route path="/inventory/dashobard" element={<InDashboard />} />
@@ -72,11 +79,21 @@ export default function AppRoutes() {
 
       {/* Finance Management */}
       <Route path="/finance/statement" element={<FinanceStatement />} />
-      <Route path="/finance/pettycash" element={<PettyCash/>} />
-      <Route path="/finance/dashboard" element={<FinanceDashboard/>} />
+      <Route path="/finance/pettycash" element={<PettyCash />} />
+      <Route path="/finance/dashboard" element={<FinanceDashboard />} />
       <Route path="/finance/incomeform" element={<IncomeForm />} />
-      <Route path="/finance/login" element={<FinanceLogin/>} />
-      
+      <Route path="/finance/login" element={<FinanceLogin />} />
+
+
+      {/* Supply Management */}
+      <Route path="/SuppLogin" element={<SupplyerLogin />} />
+      <Route path="/supplies" element={<SupplyerHeader />} />
+      <Route path="/SupplierProfile" element={<SupplierProfile />} />
+      <Route path="/ManagerProfile" element={<ManagerProfile />} />
+      <Route path="/AddSupplier" element={<AddSupplier />} />
+      <Route path="/AddManager" element={<AddManager />} />
+
+
 
       <Route
         path="/checkout"

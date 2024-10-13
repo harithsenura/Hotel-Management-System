@@ -93,7 +93,7 @@ const Dashboard = () => {
 
       {/* Second Row of Cards */}
       <div style={styles.cardContainer}>
-        <Card title="Supplier Management" content="Manage supplier relationships" Icon={FaTruck} />
+        <Card title="Supplier Management" content="Manage supplier relationships" Icon={FaTruck} onClick={() => navigate('/SuppLogin')} />
         <Card title="Restaurant Management" content="Oversee restaurant operations" Icon={FaUtensils} onClick={() => navigate('/food')}/>
         <Card title="Bar Management" content="Manage bar orders and inventory" Icon={FaCocktail} onClick={() => navigate('/barlogin')}  />
         <Card title="Event Management" content="Organize and track events" Icon={FaCalendarAlt}  onClick={() => navigate('/eventlogin')}/>
