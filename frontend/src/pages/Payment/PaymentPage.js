@@ -10,13 +10,16 @@ export default function PaymentPage() {
     const [order, setOrder] = useState();
 
     useEffect(() => {
-        getNewOrderForCurrentUser().then(data => setOrder(data));
-       
+        getNewOrderForCurrentUser()
+            .then(data => setOrder(data))
+            .catch(error => {
+                console.error('Error fetching order:', error.response || error.message);
+            });
     }, []);
-
-    if (!order) return;
-
+    
     const generatePDF = () => {
+        if (!order) return; // Avoid trying to generate PDF if order is not available
+
         const pdf = new jsPDF();
         const img = new Image();
         img.src = '/images/company.png';
@@ -28,8 +31,8 @@ export default function PaymentPage() {
             pdf.setFontSize(16);
             pdf.text('Customer Details:', 10, 80);
             pdf.setFontSize(12);
-            pdf.text(`Name: ${order.name}`, 10, 90);
-            pdf.text(`Address: ${order.address}`, 10, 100);
+            pdf.text(`Name: ${order.name || 'N/A'}`, 10, 90);
+            pdf.text(`Address: ${order.address || 'N/A'}`, 10, 100);
             pdf.setFontSize(16);
             pdf.text('Order Items:', 10, 120);
             pdf.setFontSize(12);
@@ -60,47 +63,49 @@ export default function PaymentPage() {
         };
     };
 
-    return (
-        <>
-            <div className={classes.container}>
-                <div className={classes.content}>
-                    <Title title="Order Form" fontSize="1.6rem" />
-                    <div className={classes.summary}>
-                        <div>
-                            <h3>Name:</h3>
-                            <span>{order.name}</span>
-                        </div>
-                        <div>
-                            <h3>Address:</h3>
-                            <span>{order.address}</span>
-                        </div>
-                    </div>
-                    <OrderItemsList order={order} />
-                </div>
+    if (!order) {
+        return <div>Loading...</div>; // Show a loading message while the order is being fetched
+    }
 
-                <div className={classes.buttons_container}>
-                    <div className={classes.buttons}>
-                        <PaypalButtons order={order} />
-                        <button onClick={generatePDF}
-                            style={{
-                                backgroundColor: '#4CAF50',
-                                color: 'white',
-                                padding: '10px 20px',
-                                fontSize: '16px',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                                transition: 'background-color 0.3s ease',
-                            }}
-                            onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
-                            onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}
-                        >
-                            Summary Bill
-                        </button>
+    return (
+        <div className={classes.container}>
+            <div className={classes.content}>
+                <Title title="Order Form" fontSize="1.6rem" />
+                <div className={classes.summary}>
+                    <div>
+                        <h3>Name:</h3>
+                        <span>{order.name}</span>
                     </div>
+                    <div>
+                        <h3>Address:</h3>
+                        <span>{order.address}</span>
+                    </div>
+                </div>
+                <OrderItemsList order={order} />
+            </div>
+
+            <div className={classes.buttons_container}>
+                <div className={classes.buttons}>
+                    <PaypalButtons order={order} />
+                    <button onClick={generatePDF}
+                        style={{
+                            backgroundColor: '#4CAF50',
+                            color: 'white',
+                            padding: '10px 20px',
+                            fontSize: '16px',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                            transition: 'background-color 0.3s ease',
+                        }}
+                        onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
+                        onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}
+                    >
+                        Summary Bill
+                    </button>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

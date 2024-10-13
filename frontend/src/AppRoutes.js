@@ -13,6 +13,8 @@ import OrdersPage from './pages/Orders/OrdersPage'
 import Dashboard from './pages/Dashboard/Dashboard'
 import HomeDashboard from './pages/EventManagement/DashBoard'
 import FoodsAdminPage from './pages/FoodsAdminPage/FoodsAdminPage'
+import Users from './pages/Users/User';
+
 import AdminRoute from './components/AdminRoute/AdminRoute';
 import FoodEditPage from './pages/FoodEdit/FoodEditPage'
 import AllEvents from './pages/EventManagement/AllEvents'
@@ -89,6 +91,7 @@ export default function AppRoutes() {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      
 
       {/* Event Management */}
       <Route path="/events" element={<AllEvents />} /> {/* Default route */}
@@ -162,7 +165,7 @@ export default function AppRoutes() {
       
       
       <Route
-        path="/checkout"
+        path="/foodcheckout"
         element={
           <AuthRoute>
             <CheckoutPage />
@@ -178,10 +181,18 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path="/profile"
+        path="/foodprofile"
         element={
           <AuthRoute>
             <ProfilePage />
+          </AuthRoute>
+        }
+      />
+       <Route
+        path="/admin/users"
+        element={
+          <AuthRoute>
+            <Users />
           </AuthRoute>
         }
       />

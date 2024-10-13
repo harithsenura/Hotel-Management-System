@@ -40,7 +40,7 @@ const allItems = [
     {
         title: 'Profile',
         imageUrl: '/icons/profile.svg',
-        url: '/profile',
+        url: '/foodprofile',
         bgColor: 'darkorange',
         color: 'white',
     },

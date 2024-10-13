@@ -14,7 +14,7 @@ const Login = () => {
     
     // Example validation logic
     if (username === 'baradmin' && password === '1234') {
-      navigate('/home'); // Navigate to dashboard after successful login
+      navigate('/bardashboard'); // Navigate to dashboard after successful login
     } else {
       setError('Invalid username or password');
     }

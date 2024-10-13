@@ -24,6 +24,19 @@ router.post(
     })
 );
 
+router.get(
+    '/allusers',
+    handler(async (req, res) => {
+        try {
+            const users = await UserModel.find(); // Fetch all users
+            res.send(users);
+        } catch (error) {
+            res.status(BAD_REQUEST).send('Error fetching users');
+        }
+    })
+);
+
+
 router.post(
     '/register',
     handler(async (req, res) => {

@@ -4,7 +4,7 @@ import classes from './search.module.css';
 
 Search.defaultProps = {
     searchRoute: '/search/',
-    defaultRoute: '/',
+    defaultRoute: '/food',
     placeholder: 'Search Foods Here!',
 };
 

@@ -37,6 +37,22 @@ router.post("/add", async (req, res) => {
   }
 });
 
+router.get('/available', async (req, res) => {
+  const { roomType } = req.query;
+
+  if (!roomType) {
+    return res.status(400).json({ message: "roomType is required" });
+  }
+
+  try {
+    // Fetch rooms of the specified type with status "Available"
+    const availableRooms = await Room.find({ roomType, status: "Available" }).select('roomNumber');
+    res.json(availableRooms.map(room => room.roomNumber));
+  } catch (error) {
+    console.error("Error fetching available rooms:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 // Get all rooms
 router.get("/", async (req, res) => {
   try {

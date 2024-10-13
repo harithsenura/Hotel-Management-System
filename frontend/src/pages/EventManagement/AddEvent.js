@@ -158,7 +158,7 @@ export default function AddEvent() {
   return (
     <div>
       <SideBar />
-      <div className="content-container">
+      <div >
         <div className="add-event-container">
           <div className="form-container">
             <h2>Add New Event</h2>
