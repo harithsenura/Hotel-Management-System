@@ -161,16 +161,18 @@ useEffect(() => {
             maxWidth: "800px",
             margin: "40px auto",
             padding: "20px",
-            marginLeft: '490px',
+            marginLeft: '500px',
             backgroundColor: "#f9f9f9",
             borderRadius: "10px",
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+            border:"1px solid black"
           }}
         >
           <style>
             {`
           .form-group {
             margin-bottom: 20px;
+            
           }
           .form-label {
             display: block;
@@ -207,6 +209,7 @@ useEffect(() => {
           }
           .orders-container {
             margin-top: 50px;
+            
           }
           .order-card {
             padding: 20px;
@@ -215,7 +218,8 @@ useEffect(() => {
             margin-bottom: 20px;
             margin-left:500px;
             max-width:800px;
-            background-color: #fff;
+            color:white;
+            background-color: #A02334;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           }
           .order-card h3 {

@@ -1,8 +1,11 @@
-const router = require('express').Router();
-let Customer = require('../models/customer');
+// Import necessary modules using ES6 syntax
+import { Router } from 'express';
+import Customer from '../models/customer.js'; // Ensure the correct path and file extension
+
+const router = Router();
 
 // Add a new customer
-router.route("/add").post(async (req, res) => {
+router.post("/add", async (req, res) => {
     const { name, contactNumber, email, gender, nationality, address, 
             nicPassport, checkInDate, roomType, roomNumber, price } = req.body;
 
@@ -20,7 +23,7 @@ router.route("/add").post(async (req, res) => {
 });
 
 // Get all customers
-router.route("/").get(async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const customers = await Customer.find();
         res.json(customers);
@@ -30,7 +33,7 @@ router.route("/").get(async (req, res) => {
 });
 
 // Update a customer
-router.route("/update/:id").put(async (req, res) => {
+router.put("/update/:id", async (req, res) => {
     const userId = req.params.id;
     const { name, contactNumber, email, gender, nationality, address, 
             nicPassport, checkInDate, roomType, roomNumber, price } = req.body;
@@ -49,7 +52,7 @@ router.route("/update/:id").put(async (req, res) => {
 });
 
 // Delete a customer
-router.route("/delete/:id").delete(async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
     const userId = req.params.id;
 
     try {
@@ -61,7 +64,7 @@ router.route("/delete/:id").delete(async (req, res) => {
 });
 
 // Get a specific customer
-router.route("/get/:id").get(async (req, res) => {
+router.get("/get/:id", async (req, res) => {
     const userId = req.params.id;
 
     try {
@@ -72,4 +75,5 @@ router.route("/get/:id").get(async (req, res) => {
     }
 });
 
-module.exports = router;
+// Export the router using ES6 export
+export default router;

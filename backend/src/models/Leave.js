@@ -25,8 +25,8 @@ const leaveSchema = new Schema({
     },
     approval: {
         type: String,
-        enum: ['Pending', 'Yes', 'No'],
-        default: 'Pending' // Default approval status
+        enum: ['Pending', 'Approved', 'Rejected'], // Define allowed values
+        default: 'Pending' // Default to 'Pending'
     }
 });
 

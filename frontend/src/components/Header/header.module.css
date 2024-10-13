@@ -10,6 +10,15 @@
     color: white;
 }
 
+/* header.module.css */
+.logoImage {
+    width: 100px; /* Adjust the width as needed */
+    height: 50px;
+    margin-top: -10px;
+    margin-bottom: -10px; /* Maintain aspect ratio */
+}
+
+
 .header a:hover {
     background: #000000;
     color: rgb(255, 0, 0);

@@ -188,7 +188,7 @@ const ManagerProfile = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ width: "300px", marginRight: "10px" }}
         />
-        <Button type="primary" onClick={generatePDF}>
+        <Button type="primary" onClick={generatePDF} style={{backgroundColor: "#800000",}}>
           Generate PDF
         </Button>
       </div>
@@ -331,6 +331,7 @@ const tableHeaderStyle = {
   padding: "8px",
   textAlign: "left",
 };
+
 
 const tableDataStyle = {
   border: "1px solid #dddddd",

@@ -37,18 +37,41 @@ import FinanceDashboard from './pages/FinanceManagement/Dashboard'
 import IncomeForm from './pages/FinanceManagement/IncomeForm'
 import FinanceLogin from './pages/FinanceManagement/login'
 
-import SupplyerHeader from './components/Supplyer/SupplyerHeader';
-import SupplyerLogin from './components/Supplyer/SupplyerLogin';
-import SupplierProfile from "./components/Supplyer/SupplierProfile";
-import ManagerProfile from "./components/Supplyer/ManagerProfile";
-import AddSupplier from "./components/Supplyer/AddSupplier";
-import AddManager from "./components/Supplyer/AddManager";
+import SupplyerHeader from './components/SupplyManagement/SupplyerHeader';
+import SupplyerLogin from './components/SupplyManagement/SupplyerLogin';
+import SupplierProfile from "./components/SupplyManagement/SupplierProfile";
+import ManagerProfile from "./components/SupplyManagement/ManagerProfile";
+import AddSupplier from "./components/SupplyManagement/AddSupplier";
+import AddManager from "./components/SupplyManagement/AddManager";
 
+import CusLogin from "./components/CustomerManagement/CusLogin";
+import AllCustomers from "./components/CustomerManagement/AllCustomers";
+import AddCustomer from "./components/CustomerManagement/AddCustomer";
+import CustomerProfile from "./components/CustomerManagement/CustomerProfile";
+import CheckOutPage from "./components/CustomerManagement/CheckOutPage";
+import CheckOutProfile from "./components/CustomerManagement/CheckOutProfile";
+import AddRoom from "./components/CustomerManagement/AddRoom";
+import RoomList from "./components/CustomerManagement/RoomList";
+
+import AddEmployee from './components/EmployeeManagement/AddEmployee';
+import EmployeeProfiles from './components/EmployeeManagement/EmployeeProfile';
+import AllEmployees from './components/EmployeeManagement/AllEmployees';
+import AddLeaveForm from './components/EmployeeManagement/AddLeaveForm';
+import AllLeaves from "./components/EmployeeManagement/AllLeaves";
+import EmpLogin from "./components/EmployeeManagement/Login";
+import EmpProfile from "./components/EmployeeManagement/EmpProfile";
+import EmpApprove from "./components/EmployeeManagement/EmpApprove";
+import UpdateEmpProfile from "./components/EmployeeManagement/EmpProfile";
+import AdminLogin from "./components/EmployeeManagement/AdminLogin";
+import LoginAs from "./components/EmployeeManagement/LoginAs";
+import WebHome from './pages/HomePage'; 
 
 
 export default function AppRoutes() {
   return (
+    
     <Routes>
+      <Route path="/" element={<WebHome/>} />
       <Route path="/food" element={<HomePage />} />
       <Route path="/search/:searchTerm" element={<HomePage />} />
       <Route path="/tag/:tag" element={<HomePage />} />
@@ -64,7 +87,7 @@ export default function AppRoutes() {
       <Route path="/eventplanners" element={<AllEventPlanners />} /> {/* View All Event Planners */}
       <Route path="/planner/:id" element={<UpdatePlanner />} /> {/* Update specific event planner */}
       <Route path="/events/:id" element={<UpdateEvent />} /> {/* Update event profile */}
-      <Route path="/" element={<HomeDashboard />} /> {/* Fixed closing tag */}
+      <Route path="/adminpannel" element={<HomeDashboard />} /> {/* Fixed closing tag */}
       <Route path="/eventdashboard" element={<EventDashboard />} />
       <Route path="/eventlogin" element={<Eventlogin />} />
 
@@ -93,8 +116,28 @@ export default function AppRoutes() {
       <Route path="/AddSupplier" element={<AddSupplier />} />
       <Route path="/AddManager" element={<AddManager />} />
 
+      {/* Customer */}
+      <Route path="/customers" element={<AllCustomers />} />
+        <Route path="/customers/add" element={<AddCustomer />} />
+        <Route path="/customer/:id" element={<CustomerProfile />} />
+        <Route path="/checkout" element={<CheckOutPage />} />
+        <Route path="/checkout/:id" element={<CheckOutProfile />} />
+        <Route path="/cuslogin" element={<CusLogin />} />
+        <Route path="/rooms/add" element={<AddRoom />} />
+      <Route path="/rooms" element={<RoomList />} />
 
-
+      {/* Employee */}
+      <Route path="/Employee" element={<AllEmployees/>} />
+       <Route path="/Employee/add" element={<AddEmployee/>} />
+        <Route path="/employee/:id" element={<EmployeeProfiles/>} />
+        <Route path="/leaves" element={<AllLeaves/>} /> 
+        <Route path="/profile" element={<EmpProfile/>} /> 
+        <Route path="/Approve" element={<EmpApprove/>} /> 
+        <Route path="/leave/add" element={<AddLeaveForm/>} />
+        <Route path="/employee/update/:id" element={<UpdateEmpProfile/>} />
+        <Route path="/LoginChoose" element={<LoginAs />} />
+        <Route path="/Admin_Login" element={<AdminLogin />} />  
+        <Route path="/Emp_Login" element={<EmpLogin />} /> 
       <Route
         path="/checkout"
         element={

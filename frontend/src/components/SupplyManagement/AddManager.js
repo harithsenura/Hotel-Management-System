@@ -143,8 +143,9 @@ const AddManager = () => {
 // Styles
 const formContainerStyle = {
   maxWidth: '800px',
-  margin: '0 auto',
   padding: '20px',
+  marginTop: '80px',
+  marginLeft:'500px',
   backgroundColor: '#f9f9f9',
   borderRadius: '8px',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',

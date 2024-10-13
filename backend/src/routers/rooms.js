@@ -1,8 +1,11 @@
-const router = require('express').Router();
-const Room = require('../models/room');
+// Import necessary modules using ES6 syntax
+import { Router } from 'express';
+import Room from '../models/room.js'; // Ensure the correct path and file extension
+
+const router = Router();
 
 // Add a new room
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
   const {
     roomType,
     price,
@@ -12,6 +15,7 @@ router.post("/add", (req, res) => {
     status
   } = req.body;
 
+  // Validate required fields
   if (!roomType || !price || !roomNumber || !bedType || !status) {
     return res.status(400).json({ error: "Error: Missing required fields" });
   }
@@ -25,9 +29,12 @@ router.post("/add", (req, res) => {
     status
   });
 
-  newRoom.save()
-    .then(() => res.json({ message: "Room Added" }))
-    .catch((err) => res.status(400).json({ error: "Error: " + err }));
+  try {
+    await newRoom.save();
+    res.json({ message: "Room Added" });
+  } catch (err) {
+    res.status(400).json({ error: "Error: " + err.message });
+  }
 });
 
 // Get all rooms
@@ -52,6 +59,7 @@ router.put("/update/:id", async (req, res) => {
     status
   } = req.body;
 
+  // Validate required fields
   if (!roomType || !price || !roomNumber || !bedType || !status) {
     return res.status(400).json({ error: "Error: Missing required fields" });
   }
@@ -66,8 +74,11 @@ router.put("/update/:id", async (req, res) => {
   };
 
   try {
-    await Room.findByIdAndUpdate(roomId, updateRoom, { new: true });
-    res.status(200).send({ status: "Room Updated" });
+    const updatedRoom = await Room.findByIdAndUpdate(roomId, updateRoom, { new: true });
+    if (!updatedRoom) {
+      return res.status(404).json({ status: "Room not found" });
+    }
+    res.status(200).send({ status: "Room Updated", room: updatedRoom });
   } catch (error) {
     res.status(400).send({ status: "Error updating room", error: error.message });
   }
@@ -78,7 +89,10 @@ router.delete("/delete/:id", async (req, res) => {
   const roomId = req.params.id;
 
   try {
-    await Room.findByIdAndDelete(roomId);
+    const deletedRoom = await Room.findByIdAndDelete(roomId);
+    if (!deletedRoom) {
+      return res.status(404).send({ status: "Room not found" });
+    }
     res.status(200).send({ status: "Room Deleted" });
   } catch (error) {
     res.status(500).send({ status: "Error deleting room", error: error.message });
@@ -91,10 +105,14 @@ router.get("/get/:id", async (req, res) => {
 
   try {
     const room = await Room.findById(roomId);
+    if (!room) {
+      return res.status(404).send({ status: "Room not found" });
+    }
     res.status(200).send({ status: "Room fetched", room });
   } catch (error) {
     res.status(500).send({ status: "Error fetching room", error: error.message });
   }
 });
 
-module.exports = router;
+// Export the router using ES6 export
+export default router;

@@ -1,67 +1,81 @@
-const router = require('express').Router();
-let Employee = require('../models/Employee');
+import express from 'express';
+import Employee from '../models/Employee.js';
+
+const router = express.Router();
 
 // Add new employee
-router.route("/add").post(async (req, res) => {
+router.post("/add", async (req, res) => {
     const { name, email, mobile, nic, designation, basicsal, empid } = req.body;
 
     const newEmployee = new Employee({
-        name, email, mobile: Number(mobile), nic, designation, basicsal: Number(basicsal), empid
+        name,
+        email,
+        mobile: Number(mobile),
+        nic,
+        designation,
+        basicsal: Number(basicsal),
+        empid
     });
 
     try {
         await newEmployee.save();
         res.json("Employee Added");
     } catch (err) {
-        console.log(err);
-        res.status(400).json("Error: " + err);
+        console.error(err);
+        res.status(400).json(`Error: ${err}`);
     }
 });
 
 // Get all employees
-router.route("/").get(async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const employees = await Employee.find();
         res.json(employees);
     } catch (err) {
-        console.log(err);
-        res.status(400).json("Error: " + err);
+        console.error(err);
+        res.status(400).json(`Error: ${err}`);
     }
 });
 
 // Update employee by ID
-router.route("/update/:id").put(async (req, res) => {
+router.put("/update/:id", async (req, res) => {
     const userID = req.params.id;
     const { name, email, mobile, nic, designation, basicsal, empid } = req.body;
 
     const updateEmployee = {
-        name, email, mobile: Number(mobile), nic, designation, basicsal: Number(basicsal), empid
+        name,
+        email,
+        mobile: Number(mobile),
+        nic,
+        designation,
+        basicsal: Number(basicsal),
+        empid
     };
 
     try {
         await Employee.findByIdAndUpdate(userID, updateEmployee);
         res.status(200).send({ status: "Employee Updated" });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send({ status: "Error with updating data", error: err.message });
     }
 });
 
 // Delete employee by ID
-router.route("/delete/:id").delete(async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
     const userID = req.params.id;
 
     try {
         await Employee.findByIdAndDelete(userID);
         res.status(200).send({ status: "Employee Deleted" });
     } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
         res.status(500).send({ status: "Error with deleting employee", error: err.message });
     }
 });
 
 // Get employee by ID
-router.route("/get/:id").get(async (req, res) => {
+router.get("/get/:id", async (req, res) => {
     const userID = req.params.id;
 
     try {
@@ -72,13 +86,13 @@ router.route("/get/:id").get(async (req, res) => {
             res.status(404).send({ status: "Employee not found" });
         }
     } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
         res.status(500).send({ status: "Error with get employee", error: err.message });
     }
 });
 
 // Login employee by email and mobile
-router.route("/login").post(async (req, res) => {
+router.post("/login", async (req, res) => {
     const { email, mobile } = req.body;
 
     try {
@@ -94,4 +108,4 @@ router.route("/login").post(async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

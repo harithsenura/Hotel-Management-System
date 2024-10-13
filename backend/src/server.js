@@ -15,6 +15,8 @@ import fincome from './routers/FinanceIncomeState.js';
 import fpettycash from './routers/FinancePettyCash.js'
 import SupRouter from './routers/supply.js'
 import SupManRouter from './routers/manager.js'
+import customerRouter from './routers/customers.js'
+import roomRouter from './routers/rooms.js'
 
 
 import { dbconnect } from './config/database.config.js';
@@ -49,7 +51,19 @@ app.use("/finance/pettycash", fpettycash);
 
 // Supply Manegement
 app.use("/api/supply",SupRouter);
-app.use("/api/managers",SupManRouter);
+app.use("/api/managers", SupManRouter);
+
+// Customer Management
+app.use("/customer",customerRouter);
+app.use("/room", roomRouter);
+
+// employee
+import EmployeeRouter from './routers/Employees.js';
+app.use('/employee', EmployeeRouter);
+
+// leave
+import LeaveRouter from './routers/Leaves.js';
+app.use('/leave', LeaveRouter);
 
 
 
