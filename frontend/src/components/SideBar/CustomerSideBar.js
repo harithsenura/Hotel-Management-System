@@ -157,7 +157,7 @@ function SideBar() {
 
           <li>
             <Link
-              to="/"  // Link to Dashboard page on Log Out
+              to="/adminpannel"  // Link to Dashboard page on Log Out
               style={defaultStyle}
               onMouseOver={(e) => {
                 Object.assign(e.currentTarget.style, hoverStyle);

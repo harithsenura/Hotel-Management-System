@@ -65,6 +65,16 @@ app.use('/employee', EmployeeRouter);
 import LeaveRouter from './routers/Leaves.js';
 app.use('/leave', LeaveRouter);
 
+// Bar
+import itemRoutes from './routers/itemRoutes.js'
+import userRoutes from './routers/userRoutes.js'
+import billsRoutes from './routers/billsRoutes.js'
+
+app.use("/api/items", itemRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/bills", billsRoutes);
+
+
 
 
 const PORT = 5000;

@@ -1,4 +1,4 @@
-import billsModel from '../models/billsModel';
+import billsModel from '../models/billsModel.js';
 
 // Add bill
 const addBillsController = async (req, res) => {

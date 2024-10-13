@@ -4,7 +4,7 @@ import {
     addBillsController, 
     getBillsController, 
     deleteBillController 
-} from '../controllers/billsController';
+} from '../controller/billsController.js';
 
 // Route to add a bill
 router.post("/add-bills", addBillsController);

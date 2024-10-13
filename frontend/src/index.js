@@ -9,6 +9,8 @@ import './axiosConfig';
 import { AuthProvider } from './hooks/useAuth';
 import { LoadingProvider } from './hooks/useLoading';
 import './interceptors/authInterceptor';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,7 +20,9 @@ root.render(
       <LoadingProvider>
         <AuthProvider>
           <CartProvider>
+            <Provider store ={store}>
             <App />
+            </Provider>
           </CartProvider>
         </AuthProvider>
       </LoadingProvider>

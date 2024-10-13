@@ -67,6 +67,13 @@ import LoginAs from "./components/EmployeeManagement/LoginAs";
 import WebHome from './pages/HomePage'; 
 import AdminPannel from './pages/LoginForm'; 
 
+import BarCartPage from "./components/Bar/CartPage";
+import Homepage from "./components/Bar/Homepage";
+import ItemsPage from "./components/Bar/ItemsPage";
+import BillsPage from "./components/Bar/BillsPage";
+import BarLogin from "./components/Bar/BarLogin";
+import Bardash from "./components/Bar/CustomerPage"
+
 
 
 export default function AppRoutes() {
@@ -141,6 +148,19 @@ export default function AppRoutes() {
         <Route path="/LoginChoose" element={<LoginAs />} />
         <Route path="/Admin_Login" element={<AdminLogin />} />  
         <Route path="/Emp_Login" element={<EmpLogin />} /> 
+      
+      {/* Bar */}
+      <Route path="/home" element={<Homepage />} />
+        <Route path="/items" element={<ItemsPage />} />
+        <Route path="/barcart" element={<BarCartPage />} />
+        <Route path="/bills" element={<BillsPage />} />
+        <Route path="/barlogin" element={<BarLogin />} />     
+        <Route path="/bardashboard" element={<Bardash />} />     
+
+       
+      
+      
+      
       <Route
         path="/checkout"
         element={
