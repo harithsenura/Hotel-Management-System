@@ -1,4 +1,4 @@
-// PettyCashTable.js
+// src/pages/PettyCashTable/PettyCashTable.js
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -6,8 +6,9 @@ import './PettyCashTable.css';
 import PettyCashUpdateForm from './PettyCashUpdateForm'; // Ensure this component exists
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { FaEdit, FaTrash, FaDownload ,FaPlus} from 'react-icons/fa';
 import SideBar from '../../components/SideBar/FinanceSideBar';
-
+import logo from '../../images/company.png';
 const PettyCashTable = () => {
   // State variables
   const [pettyCashData, setPettyCashData] = useState([]);
@@ -65,7 +66,7 @@ const PettyCashTable = () => {
   const calculateCurrentBalance = (data, month, year) => {
     // Extract unique month-year pairs in chronological order
     const monthYearsSet = new Set();
-    data.forEach(entry => {
+    data.forEach((entry) => {
       const entryDate = new Date(entry.date);
       const entryMonth = entryDate.getMonth() + 1;
       const entryYear = entryDate.getFullYear();
@@ -73,7 +74,16 @@ const PettyCashTable = () => {
       monthYearsSet.add(key);
     });
 
-    const monthYears = Array.from(monthYearsSet).sort();
+    const monthYears = Array.from(monthYearsSet).sort((a, b) => {
+      const [yearA, monthA] = a.split('-').map(Number);
+      const [yearB, monthB] = b.split('-').map(Number);
+      if (yearA !== yearB) {
+        return yearA - yearB;
+      }
+      return monthA - monthB;
+    });
+
+    console.log('Sorted Month-Years:', monthYears); // Debugging log
 
     let carriedOver = 0;
     let currentBalance = 0;
@@ -88,13 +98,17 @@ const PettyCashTable = () => {
 
       // Sum payments for this month
       const sumPayments = data
-        .filter(entry => {
+        .filter((entry) => {
           const entryDate = new Date(entry.date);
           const eMonth = entryDate.getMonth() + 1;
           const eYear = entryDate.getFullYear();
           return eYear === entryYear && eMonth === entryMonth;
         })
-        .reduce((sum, entry) => sum + Number(entry.payments), 0);
+        .reduce((sum, entry) => sum + Number(entry.payments || 0), 0);
+
+      console.log(
+        `Processing ${entryMonth}-${entryYear}: Sum Payments = ${sumPayments}, Carried Over = ${carriedOver}`
+      ); // Debugging log
 
       // Initial balance for this month is 100,000 plus carried over
       const initialBalance = 100000 + carriedOver;
@@ -102,11 +116,17 @@ const PettyCashTable = () => {
       // Remaining balance after payments
       carriedOver = initialBalance - sumPayments;
 
+      console.log(
+        `After ${entryMonth}-${entryYear}: Carried Over = ${carriedOver}`
+      ); // Debugging log
+
       // If this is the current month, set the currentBalance
       if (entryYear === year && entryMonth === month) {
         currentBalance = carriedOver;
       }
     }
+
+    console.log('Calculated Current Balance:', currentBalance); // Debugging log
 
     return currentBalance;
   };
@@ -183,9 +203,7 @@ const PettyCashTable = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this entry?')) {
       try {
-        await axios.delete(
-          `http://localhost:5000/finance/pettycash/delete/${id}`
-        );
+        await axios.delete(`http://localhost:5000/finance/pettycash/delete/${id}`);
         fetchData(); // Refresh data after deletion
         alert('Entry deleted successfully');
       } catch (error) {
@@ -200,7 +218,7 @@ const PettyCashTable = () => {
     const doc = new jsPDF();
     const tableColumn = ['Date', 'Description', 'No', 'Payments'];
     const tableRows = [];
-
+    
     // Filter entries for the selected month and year
     const filteredData = pettyCashData.filter((entry) => {
       const entryDate = new Date(entry.date);
@@ -208,7 +226,7 @@ const PettyCashTable = () => {
       const entryYear = entryDate.getFullYear();
       return entryMonth === currentMonth && entryYear === currentYear;
     });
-
+    
     // Prepare table rows
     filteredData.forEach((entry) => {
       const rowData = [
@@ -219,36 +237,56 @@ const PettyCashTable = () => {
       ];
       tableRows.push(rowData);
     });
-
-    // Add title
+  
+    // Add page border (around the whole page)
+    doc.setLineWidth(0.5); // Line width for border
+    doc.rect(10, 10, 190, 277); // x, y, width, height (adjust the values as needed)
+  
+    // Add company logo at the top-left corner (small logo)
+    doc.addImage(logo, 'PNG', 10, 10, 30, 25); // x, y, width, height of logo
+    
+    // Add space after the logo
     doc.setFontSize(18);
-    doc.text('Petty Cash Statement', 14, 22);
+    doc.text('Petty Cash Statement', 50, 22); // Title after logo, adjusted to start after some space
+    
+    // Add some spacing below the heading
     doc.setFontSize(12);
     doc.text(
-      `Month: ${new Date(currentYear, currentMonth - 1).toLocaleString(
-        'default',
-        { month: 'long' }
-      )} ${currentYear}`,
-      14,
-      30
+      `Month: ${new Date(currentYear, currentMonth - 1).toLocaleString('default', {
+        month: 'long',
+      })} ${currentYear}`,
+      50,
+      30 // Adjust position based on the title
     );
-
-    // Add table
+    
+    // Add space before the table content
+    doc.setFontSize(10);
+    const tableStartY = 40; // Space before the table
+    
+    // Add table below the heading
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
-      startY: 35,
+      startY: tableStartY, // Table starts after the heading
       theme: 'grid',
     });
-
-    // Add balance at the end
-    const finalY = doc.lastAutoTable.finalY || 35;
+  
+    // Add balance at the end of the table
+    const finalY = doc.lastAutoTable.finalY || tableStartY;
     doc.text(`Current Balance: ${balance}`, 14, finalY + 10);
-
+  
+    // Add fixed "Thank You" message at the bottom center of the page
+    doc.setFontSize(10);
+    const thankYouMessage = 'Thank you for using our services!';
+    const pageWidth = doc.internal.pageSize.width;
+    const textWidth = doc.getStringUnitWidth(thankYouMessage) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+    doc.text(thankYouMessage, (pageWidth - textWidth) / 2, 285); // Positioned at bottom center
+    
     // Save the PDF
     doc.save('Petty_Cash_Statement.pdf');
   };
-
+  
+  
   // Function to handle month and year selection
   const handleMonthChange = (e) => {
     const [month, year] = e.target.value.split('-').map(Number);
@@ -355,7 +393,7 @@ const PettyCashTable = () => {
             max={balance} // Prevent payments exceeding the balance
           />
           <button type="submit" className="add-button">
-            Add
+            <FaPlus /> Add
           </button>
         </form>
 
@@ -401,10 +439,10 @@ const PettyCashTable = () => {
                     <td>{entry.payments}</td>
                     <td>
                       <button onClick={() => handleOpenUpdateForm(entry)}>
-                        Update
+                        <FaEdit /> Update
                       </button>
                       <button onClick={() => handleDelete(entry._id)}>
-                        Delete
+                        <FaTrash /> Delete
                       </button>
                     </td>
                   </tr>
@@ -415,7 +453,7 @@ const PettyCashTable = () => {
           {/* Download PDF Button */}
           {pettyCashData.length > 0 && (
             <button className="download-button" onClick={handleDownloadPDF}>
-              Download PDF
+              <FaDownload /> Download Monthly Statement
             </button>
           )}
         </div>

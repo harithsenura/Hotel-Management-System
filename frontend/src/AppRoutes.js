@@ -33,6 +33,9 @@ import InAddOrders from './pages/InventoryManagement/AddOrders'
 import Inventorylogin from './pages/InventoryManagement/InventoryLogin'
 import FinanceStatement from './pages/FinanceManagement/IncomeTable'
 import PettyCash from './pages/FinanceManagement/PettyCashTable'
+import FinanceDashboard from './pages/FinanceManagement/Dashboard'
+import IncomeForm from './pages/FinanceManagement/IncomeForm'
+import FinanceLogin from './pages/FinanceManagement/login'
 
 
 
@@ -70,6 +73,9 @@ export default function AppRoutes() {
       {/* Finance Management */}
       <Route path="/finance/statement" element={<FinanceStatement />} />
       <Route path="/finance/pettycash" element={<PettyCash/>} />
+      <Route path="/finance/dashboard" element={<FinanceDashboard/>} />
+      <Route path="/finance/incomeform" element={<IncomeForm />} />
+      <Route path="/finance/login" element={<FinanceLogin/>} />
       
 
       <Route

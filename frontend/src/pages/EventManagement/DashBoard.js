@@ -87,7 +87,7 @@ const Dashboard = () => {
           onClick={() => navigate('/cuslogin')}
         />
         <Card title="Employee Management" content="Manage your employees" Icon={FaUserTie}  />
-        <Card title="Finance Management" content="Track and manage finances" Icon={FaMoneyBillWave}  onClick={() => navigate('/finance/statement')}/>
+        <Card title="Finance Management" content="Track and manage finances" Icon={FaMoneyBillWave}  onClick={() => navigate('/finance/login')}/>
         <Card title="Inventory Management" content="Manage your inventory" Icon={FaWarehouse} onClick={() => navigate('/inventorylogin')} />
       </div>
 

@@ -82,7 +82,7 @@ function SideBar() {
         <ul style={{ listStyleType: 'none', padding: '30px 0 0 0' }}>
           <li>
             <Link
-              to="/eventdashboard"
+              to="/finance/dashboard"
               style={defaultStyle}
               onMouseOver={(e) => {
                 Object.assign(e.currentTarget.style, hoverStyle);

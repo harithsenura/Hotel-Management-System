@@ -43,6 +43,7 @@
   color: white;
   padding: 8px 16px;
   border: none;
+  width: 90px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -86,10 +87,9 @@ button:hover {
   padding-bottom: 40px; /* Add padding to the bottom to avoid overlap with the button */
 }
 
-/*download button*/
+
 .download-button {
   position: absolute;
-  bottom: -50px; /* Position the button just below the table */
   left: 0; /* Align to the bottom-left corner */
   background-color: #b30000;
   color: white;
@@ -99,8 +99,10 @@ button:hover {
   font-size: 14px; /* Adjust font size for a more compact button */
   cursor: pointer;
   transition: background-color 0.3s;
-  width: 100px;
+  width: 250px;
+  height: 40px;
   margin-top: 40px;
+  margin-left: 450px;
 }
 
 .download-button:hover {

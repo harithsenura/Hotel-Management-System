@@ -28,7 +28,7 @@ const IncomeTable = () => {
   };
 
   const handleAdd = () => {
-    navigate('/form'); // Navigate to the add form page
+    navigate('/finance/incomeform'); // Navigate to the add form page
   };
 
   const handleUpdate = () => {
@@ -210,7 +210,7 @@ const IncomeTable = () => {
                   <td className="amount">{totals.totalProfits}</td>
                 </tr>
                 <tr className="net-total-row bold-text">
-                  <td>Net Total</td>
+                  <td>Net Total(Rs)</td>
                   <td></td>
                   <td className="amount">{totals.netTotal}</td>
                 </tr>
