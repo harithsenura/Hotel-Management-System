@@ -65,13 +65,16 @@ import UpdateEmpProfile from "./components/EmployeeManagement/EmpProfile";
 import AdminLogin from "./components/EmployeeManagement/AdminLogin";
 import LoginAs from "./components/EmployeeManagement/LoginAs";
 import WebHome from './pages/HomePage'; 
+import AdminPannel from './pages/LoginForm'; 
+
 
 
 export default function AppRoutes() {
   return (
     
     <Routes>
-      <Route path="/" element={<WebHome/>} />
+      <Route path="/" element={<WebHome />} />
+      <Route path="/adminlogin" element={<AdminPannel/>} />
       <Route path="/food" element={<HomePage />} />
       <Route path="/search/:searchTerm" element={<HomePage />} />
       <Route path="/tag/:tag" element={<HomePage />} />

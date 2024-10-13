@@ -192,7 +192,7 @@ const HomePage = () => {
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
   const handleOrderClick = () => {
-    navigate('/food'); // Navigate to /order route
+    navigate('/login'); // Navigate to /order route
   };
 
   const handleLoginClick = () => {
@@ -200,11 +200,11 @@ const HomePage = () => {
   };
 
   const handleAdminLogin = () => {
-    navigate('/admin'); // Navigate to admin login page
+    navigate('/adminlogin'); // Navigate to admin login page
   };
 
   const handleCustomerLogin = () => {
-    navigate('/cus'); // Navigate to customer login page
+    navigate('/login'); // Navigate to customer login page
   };
 
   

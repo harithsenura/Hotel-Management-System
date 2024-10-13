@@ -75,8 +75,23 @@ const Card = ({ title, content, Icon, onClick }) => {
 // Dashboard component
 const Dashboard = () => {
   const navigate = useNavigate(); // useNavigate hook
-
+  const titleBarStyle = {
+    backgroundColor: '#1a1a1a',  // Match sidebar color
+    padding: '10px',  // Increased padding for better appearance
+    margin: 0,
+    width: '100%',  // Full width minus sidebar width
+    position: 'fixed',
+    top: 0,  // Align with the top of the viewport
+    boxSizing: 'border-box',
+    textAlign: 'center',  // Center the title text
+    color: '#fff',  // White text for contrast on dark background
+    borderBottom: '1px solid #333',  // Optional: darker gray border at the bottom for better contrast
+  };
   return (
+    <>
+      <div style={titleBarStyle}>
+        <h1 style={{ margin: 0, padding: 0 }}>Admin Pannel</h1>
+      </div>
     <div style={styles.dashboard}>
       {/* First Row of Cards */}
       <div style={styles.cardContainer}>
@@ -98,7 +113,8 @@ const Dashboard = () => {
         <Card title="Bar Management" content="Manage bar orders and inventory" Icon={FaCocktail} onClick={() => navigate('/barlogin')}  />
         <Card title="Event Management" content="Organize and track events" Icon={FaCalendarAlt}  onClick={() => navigate('/eventlogin')}/>
       </div>
-    </div>
+      </div>
+      </>
   );
 };
 

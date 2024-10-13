@@ -23,7 +23,7 @@ export default function LoginPage() {
     useEffect(() => {
         if (!user) return;
 
-        returnUrl ? navigate(returnUrl) : navigate('/');
+        returnUrl ? navigate(returnUrl) : navigate('/food');
     }, [user]);
 
     const submit = async ({ email, password }) => {
