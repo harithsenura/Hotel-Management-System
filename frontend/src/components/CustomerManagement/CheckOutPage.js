@@ -31,11 +31,11 @@ export default function CheckOutPage() {
       customer.contactNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
       customer.nicPassport.toLowerCase().includes(searchQuery.toLowerCase()) ||
       customer.roomType.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      customer.roomNumber.toString().includes(searchQuery) || 
+      customer.roomNumber.toString().includes(searchQuery) ||
       customer.price.toString().includes(searchQuery) ||
       customer.gender.toString().includes(searchQuery) ||
       customer.nationality.toString().includes(searchQuery) ||
-      customer.address.toString().includes(searchQuery) 
+      customer.address.toString().includes(searchQuery)
     );
   });
 
@@ -49,7 +49,7 @@ export default function CheckOutPage() {
     doc.text("Address: 1234 Event St, City, State, ZIP", 10, 35);
     doc.text("Contact: (123) 456-7890", 10, 40);
     doc.text("Email: info@cinnomred.com", 10, 45);
-    
+
     doc.setFontSize(18);
     doc.setTextColor(0);
     const headingY = 60;
@@ -95,69 +95,69 @@ export default function CheckOutPage() {
 
   return (
     <>
-      <SideBar/>
-    <div style={containerStyle}>
-      <h1 style={headerStyle}>Check-Out</h1>
-      <input
-        type="text"
-        placeholder="Search..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-        style={searchInputStyle}
-      />
-      <button onClick={exportPDF} style={buttonStyle}>
-        Export as PDF
-      </button>
-      <table style={tableStyle}>
-        <thead>
-          <tr>
-            <th style={tableHeaderStyle}>Name</th>
-            <th style={tableHeaderStyle}>Contact Number</th>
-            <th style={tableHeaderStyle}>Email</th>
-            <th style={tableHeaderStyle}>Gender</th>
-            <th style={tableHeaderStyle}>Nationality</th>
-            <th style={tableHeaderStyle}>Address</th>
-            <th style={tableHeaderStyle}>NIC/Passport Number</th>
-            <th style={tableHeaderStyle}>Check-In Date</th>
-            <th style={tableHeaderStyle}>Room Type</th>
-            <th style={tableHeaderStyle}>Room Number</th>
-            <th style={tableHeaderStyle}>Price</th>
-            <th style={tableHeaderStyle}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredCustomers.length > 0 ? (
-            filteredCustomers.map(customer => (
-              <tr key={customer._id} style={tableRowStyle}>
-                <td style={tableCellStyle}>{customer.name}</td>
-                <td style={tableCellStyle}>{customer.contactNumber}</td>
-                <td style={tableCellStyle}>{customer.email}</td>
-                <td style={tableCellStyle}>{customer.gender}</td>
-                <td style={tableCellStyle}>{customer.nationality}</td>
-                <td style={tableCellStyle}>{customer.address}</td>
-                <td style={tableCellStyle}>{customer.nicPassport}</td>
-                <td style={tableCellStyle}>{customer.checkInDate}</td>
-                <td style={tableCellStyle}>{customer.roomType}</td>
-                <td style={tableCellStyle}>{customer.roomNumber}</td>
-                <td style={tableCellStyle}>${customer.price}</td>
-                <td style={tableCellStyle}>
-                  <Link to={`/checkout/${customer._id}`} style={{ textDecoration: 'none' }}>
-                    <button style={buttonStyle}>Check-Out</button>
-                  </Link>
+      <SideBar />
+      <div style={containerStyle}>
+        <h1 style={headerStyle}>Check-Out</h1>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          style={searchInputStyle}
+        />
+        <button onClick={exportPDF} style={buttonStyle}>
+          Export as PDF
+        </button>
+        <table style={tableStyle}>
+          <thead>
+            <tr>
+              <th style={tableHeaderStyle}>Name</th>
+              <th style={tableHeaderStyle}>Contact Number</th>
+              <th style={tableHeaderStyle}>Email</th>
+              <th style={tableHeaderStyle}>Gender</th>
+              <th style={tableHeaderStyle}>Nationality</th>
+              <th style={tableHeaderStyle}>Address</th>
+              <th style={tableHeaderStyle}>NIC/Passport Number</th>
+              <th style={tableHeaderStyle}>Check-In Date</th>
+              <th style={tableHeaderStyle}>Room Type</th>
+              <th style={tableHeaderStyle}>Room Number</th>
+              <th style={tableHeaderStyle}>Price</th>
+              <th style={tableHeaderStyle}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredCustomers.length > 0 ? (
+              filteredCustomers.map(customer => (
+                <tr key={customer._id} style={tableRowStyle}>
+                  <td style={tableCellStyle}>{customer.name}</td>
+                  <td style={tableCellStyle}>{customer.contactNumber}</td>
+                  <td style={tableCellStyle}>{customer.email}</td>
+                  <td style={tableCellStyle}>{customer.gender}</td>
+                  <td style={tableCellStyle}>{customer.nationality}</td>
+                  <td style={tableCellStyle}>{customer.address}</td>
+                  <td style={tableCellStyle}>{customer.nicPassport}</td>
+                  <td style={tableCellStyle}>{new Date(customer.checkInDate).toLocaleDateString()}</td>
+                  <td style={tableCellStyle}>{customer.roomType}</td>
+                  <td style={tableCellStyle}>{customer.roomNumber}</td>
+                  <td style={tableCellStyle}>${customer.price}</td>
+                  <td style={tableCellStyle}>
+                    <Link to={`/checkout/${customer._id}`} style={{ textDecoration: 'none' }}>
+                      <button style={buttonStyle}>Check-Out</button>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="12" style={{ textAlign: "center", padding: "20px", fontSize: "18px", color: "red" }}>
+                  No data found
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="12" style={{ textAlign: "center", padding: "20px", fontSize: "18px", color: "red" }}>
-                No data found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
       </div>
-      </>
+    </>
   );
 }
 
@@ -211,7 +211,7 @@ const tableCellStyle = {
 
 const buttonStyle = {
   padding: '5px 10px',
-  marginLeft:'10px',
+  marginLeft: '10px',
   backgroundColor: '#800000',
   color: '#fff',
   border: 'none',

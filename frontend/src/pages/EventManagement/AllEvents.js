@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaEdit, FaTrash } from "react-icons/fa";
+import { FaSearch, FaEdit, FaTrash, FaFilePdf, FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { MdLocationOn, MdPeople, MdAccessTime } from "react-icons/md";
+import { RiUserStarFill } from "react-icons/ri";
+import { GiPartyPopper } from "react-icons/gi";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import SideBar from "../../components/SideBar/EventSidebar.js";
-import "./AllEvents.css"; // External styles
+import "./AllEvents.css";
 import logo from '../../images/company.png';
 
 const AllEvents = () => {
@@ -16,14 +19,23 @@ const AllEvents = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [confirmDialogData, setConfirmDialogData] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const eventsPerPage = 8;
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/events/")
-      .then((res) => {
+    const fetchEvents = async () => {
+      try {
+        const res = await axios.get("http://localhost:5001/events/");
         setEvents(Array.isArray(res.data.data) ? res.data.data : []);
-      })
-      .catch((err) => alert(err.message));
+        setIsLoading(false);
+      } catch (err) {
+        alert(err.message);
+        setIsLoading(false);
+      }
+    };
+    
+    fetchEvents();
   }, []);
 
   const handleDeleteClick = (event) => {
@@ -31,21 +43,19 @@ const AllEvents = () => {
     setShowConfirmDialog(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirmDialogData) {
-      axios
-        .delete(`http://localhost:5000/events/${confirmDialogData._id}`)
-        .then(() => {
-          setAlertMessage("Event deleted successfully!");
-          setShowAlert(true);
-          setTimeout(() => setShowAlert(false), 3000);
-          setEvents(events.filter((event) => event._id !== confirmDialogData._id));
-        })
-        .catch((err) => {
-          setAlertMessage("Error deleting event.");
-          setShowAlert(true);
-          setTimeout(() => setShowAlert(false), 3000);
-        });
+      try {
+        await axios.delete(`http://localhost:5001/events/${confirmDialogData._id}`);
+        setAlertMessage("Event deleted successfully!");
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 3000);
+        setEvents(events.filter((event) => event._id !== confirmDialogData._id));
+      } catch (err) {
+        setAlertMessage("Error deleting event.");
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 3000);
+      }
       setShowConfirmDialog(false);
     }
   };
@@ -58,18 +68,26 @@ const AllEvents = () => {
     (event) =>
       event.Event.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.Venue.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.EventPlanner.toLowerCase().includes(searchQuery.toLowerCase()));
+      event.EventPlanner.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
+  // Pagination logic
+  const indexOfLastEvent = currentPage * eventsPerPage;
+  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+  const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+  const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateReport = () => {
     const doc = new jsPDF();
 
     // Add the logo
-    doc.addImage(logo, "PNG", 10, 10, 25, 13); // Adjust the dimensions as necessary
+    doc.addImage(logo, "PNG", 10, 10, 25, 13);
 
-    // Add company details below the logo
+    // Add company details
     doc.setFontSize(8);
-    doc.setTextColor(0); // Set a lighter color for professionalism
+    doc.setTextColor(0);
     doc.text("Cinnomon Red Colombo", 10, 30);
     doc.text("Address :1234 Event St, City, State, ZIP", 10, 35);
     doc.text("Contact :(123) 456-7890", 10, 40);
@@ -77,16 +95,16 @@ const AllEvents = () => {
 
     // Add centered heading
     doc.setFontSize(18);
-    doc.setTextColor(0); // Reset text color to black
-    const headingY = 60; // Adjusted position for heading
+    doc.setTextColor(0);
+    const headingY = 60;
     doc.text("Event Management", doc.internal.pageSize.getWidth() / 2, headingY, { align: "center" });
 
     // Draw underline for heading
-    const headingWidth = doc.getTextWidth("Event Management"); // Calculate the width of the heading
-    const underlineY = headingY + 1; // Position for underline
-    doc.setDrawColor(0); // Set color for the underline
+    const headingWidth = doc.getTextWidth("Event Management");
+    const underlineY = headingY + 1;
+    doc.setDrawColor(0);
     doc.line((doc.internal.pageSize.getWidth() / 2) - (headingWidth / 2), underlineY,
-      (doc.internal.pageSize.getWidth() / 2) + (headingWidth / 2), underlineY); // Draw line
+      (doc.internal.pageSize.getWidth() / 2) + (headingWidth / 2), underlineY);
 
     // Add a line break
     doc.setFontSize(12);
@@ -118,97 +136,210 @@ const AllEvents = () => {
     doc.autoTable({
       head: [columns],
       body: rows,
-      startY: 80, // Start position after the logo and company details
+      startY: 80,
+      styles: {
+        cellPadding: 5,
+        fontSize: 10,
+        valign: 'middle'
+      },
+      headStyles: {
+        fillColor: [44, 62, 80],
+        textColor: 255,
+        fontStyle: 'bold'
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245]
+      }
     });
 
-    // Add a professional ending
-    const endingY = doc.internal.pageSize.getHeight() - 30; // Fix position for ending at the bottom
+    // Add footer
+    const endingY = doc.internal.pageSize.getHeight() - 30;
     doc.setFontSize(10);
     doc.text("Thank you for choosing our services.", doc.internal.pageSize.getWidth() / 2, endingY, { align: "center" });
-
-    // Add contact number sample below the thank you message
     doc.text("Contact us at: (123) 456-7890", doc.internal.pageSize.getWidth() / 2, endingY + 10, { align: "center" });
 
     // Draw page border
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    doc.rect(5, 5, pageWidth - 10, pageHeight - 10); // Draw a border with 5 unit padding
+    doc.rect(5, 5, pageWidth - 10, pageHeight - 10);
 
     // Save the PDF
     doc.save("All_Events_report.pdf");
   };
 
-
   return (
-    <div>
+    <div className="all-events-container">
       <SideBar />
 
       <div className="content-container">
-        <h1 className="page-title">All Events</h1>
+        <motion.div 
+          className="header-section"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="page-title">Event Management</h1>
+          <p className="page-subtitle">View and manage all scheduled events</p>
+        </motion.div>
 
-        <div className="search-bar-container">
+        <motion.div 
+          className="action-bar"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
           <SearchBar onSearch={(query) => setSearchQuery(query)} />
-        </div>
+          <button onClick={generateReport} className="generate-report-button">
+            <FaFilePdf /> Generate Report
+          </button>
+        </motion.div>
 
-        <div className="table-wrapper">
-          <table className="modern-table">
-            <thead>
-              <tr>
-                <th>Event</th>
-                <th>Date</th>
-                <th>Venue</th>
-                <th>Event Planner</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Decorations</th>
-                <th>No. of Guests</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredEvents.length > 0 ? (
-                filteredEvents.map((event) => (
-                  <tr key={event._id}>
-                    <td>{event.Event}</td>
-                    <td>{new Date(event.Date).toLocaleDateString()}</td>
-                    <td>{event.Venue}</td>
-                    <td>{event.EventPlanner}</td>
-                    <td>{event.StartTime}</td>
-                    <td>{event.EndTime}</td>
-                    <td>{event.Decorations}</td>
-                    <td>{event.NoOfGuests}</td>
-                    <td>
-                      <Link to={`/events/${event._id}`} className="update-button">
-                        <FaEdit /> {/* Update icon */}
-                      </Link>
-                    </td>
-                    <td>
-                      <button onClick={() => handleDeleteClick(event)} className="delete-button">
-                        <FaTrash /> {/* Delete icon */}
+        {isLoading ? (
+          <motion.div 
+            className="loading-container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="loading-spinner"></div>
+            <p>Loading events...</p>
+          </motion.div>
+        ) : (
+          <motion.div
+            className="events-table-container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            {filteredEvents.length > 0 ? (
+              <>
+                <table className="events-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '25%' }}>Event</th>
+                      <th style={{ width: '12%' }}>Date</th>
+                      <th style={{ width: '15%' }}>Venue</th>
+                      <th style={{ width: '12%' }}>Planner</th>
+                      <th style={{ width: '14%' }}>Time</th>
+                      <th style={{ width: '10%' }}>Status</th>
+                      <th style={{ width: '7%' }}>Guests</th>
+                      <th style={{ width: '15%' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentEvents.map((event) => (
+                      <motion.tr 
+                        key={event._id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <td className="event-name-cell">
+                          {event.Event}
+                          {event.Decorations && (
+                            <div className="decorations-tag">{event.Decorations}</div>
+                          )}
+                        </td>
+                        <td className="event-date-cell">
+                          {new Date(event.Date).toLocaleDateString()}
+                        </td>
+                        <td>{event.Venue}</td>
+                        <td>{event.EventPlanner}</td>
+                        <td className="event-time-cell">
+                          <MdAccessTime />
+                          {event.StartTime} - {event.EndTime}
+                        </td>
+                        <td>
+                          <span className="status-badge status-active">
+                            Active
+                          </span>
+                        </td>
+                        <td>{event.NoOfGuests}</td>
+                        <td>
+                          <div className="table-actions">
+                            <Link 
+                              to={`/events/${event._id}`} 
+                              className="table-action-btn view"
+                              title="View Details"
+                            >
+                              <FaEye />
+                            </Link>
+                            <Link 
+                              to={`/events/edit/${event._id}`} 
+                              className="table-action-btn edit"
+                              title="Edit Event"
+                            >
+                              <FaEdit />
+                            </Link>
+                            <button 
+                              onClick={() => handleDeleteClick(event)} 
+                              className="table-action-btn delete"
+                              title="Delete Event"
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+                {totalPages > 1 && (
+                  <div className="table-footer">
+                    <div>Showing {indexOfFirstEvent + 1}-{Math.min(indexOfLastEvent, filteredEvents.length)} of {filteredEvents.length} events</div>
+                    <div className="pagination">
+                      <button 
+                        className="pagination-btn" 
+                        onClick={() => paginate(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        <FaChevronLeft />
                       </button>
-                    </td>
-
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="10" className="no-data">
-                    No events available
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+                        <button
+                          key={number}
+                          className={`pagination-btn ${currentPage === number ? 'active' : ''}`}
+                          onClick={() => paginate(number)}
+                        >
+                          {number}
+                        </button>
+                      ))}
+                      <button 
+                        className="pagination-btn" 
+                        onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        <FaChevronRight />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <motion.div
+                className="table-empty-state"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <img src="https://cdn.dribbble.com/users/1175431/screenshots/6188233/media/ad42057889c385dd8f84f6f7554a3e5f.png" 
+                     alt="No events found" 
+                     className="no-events-image" />
+                <h3>No events found</h3>
+                <p>Try adjusting your search or add a new event</p>
+              </motion.div>
+            )}
+          </motion.div>
+        )}
 
         <AnimatePresence>
           {showAlert && (
             <motion.div
               className="alert"
-              initial={{ opacity: 0, x: "100%" }}
-              animate={{ opacity: 1, x: "0%" }}
-              exit={{ opacity: 0, x: "100%" }}
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              transition={{ type: 'spring', damping: 25 }}
             >
               {alertMessage}
             </motion.div>
@@ -216,33 +347,37 @@ const AllEvents = () => {
         </AnimatePresence>
 
         {showConfirmDialog && (
-          <div className="confirm-dialog-overlay">
-            <div className="confirm-dialog">
+          <motion.div 
+            className="confirm-dialog-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="confirm-dialog"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
               <h2>Confirm Deletion</h2>
-              <p>Are you sure you want to delete this event?</p>
+              <p>Are you sure you want to delete the event "{confirmDialogData?.Event}"?</p>
               <div className="dialog-buttons">
                 <button onClick={handleDelete} className="confirm-delete">
-                  Yes, Delete
+                  Delete
                 </button>
                 <button onClick={handleCancel} className="cancel-delete">
                   Cancel
                 </button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
-
-        <div className="report-button-container">
-          <button onClick={generateReport} className="generate-report-button">
-            Generate Report
-          </button>
-        </div>
       </div>
     </div>
   );
 };
 
-// SearchBar Component
 const SearchBar = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -253,15 +388,14 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <div className="search-bar">
+      <FaSearch className="search-icon" />
       <input
         type="text"
         placeholder="Search events..."
         value={searchQuery}
         onChange={handleSearch}
+        className="search-input"
       />
-      <button type="submit">
-        <FaSearch />
-      </button>
     </div>
   );
 };

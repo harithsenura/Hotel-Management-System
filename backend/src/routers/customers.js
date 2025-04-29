@@ -6,8 +6,9 @@ const router = Router();
 
 // Add a new customer
 router.post("/add", async (req, res) => {
-    const { name, contactNumber, email, gender, nationality, address, 
-            nicPassport, checkInDate, roomType, roomNumber, price } = req.body;
+    console.log(req.body); // Log the incoming data
+    const { name, contactNumber, email, gender, nationality, address,
+        nicPassport, checkInDate, roomType, roomNumber, price } = req.body;
 
     const newCustomer = new Customer({
         name, contactNumber, email, gender, nationality, address,
@@ -18,9 +19,11 @@ router.post("/add", async (req, res) => {
         await newCustomer.save();
         res.json("Customer Added");
     } catch (err) {
+        console.error("Error while saving customer:", err);
         res.status(400).json("Error: " + err);
     }
 });
+
 
 // Get all customers
 router.get("/", async (req, res) => {
@@ -35,8 +38,8 @@ router.get("/", async (req, res) => {
 // Update a customer
 router.put("/update/:id", async (req, res) => {
     const userId = req.params.id;
-    const { name, contactNumber, email, gender, nationality, address, 
-            nicPassport, checkInDate, roomType, roomNumber, price } = req.body;
+    const { name, contactNumber, email, gender, nationality, address,
+        nicPassport, checkInDate, roomType, roomNumber, price } = req.body;
 
     const updateCustomer = {
         name, contactNumber, email, gender, nationality, address,

@@ -1,17 +1,17 @@
 import express from 'express';
-
 import { EventPlanner } from '../models/eventPlannerModel.js';
 
 const router = express.Router();
 
 // Middleware for validating event data
 const validateEventPlanner = (req, res, next) => {
+    const { Name, AssignedEvent, SalaryForTheEvent, Email, ContactNumber } = req.body; // Extract values from req.body
+
     console.log('Validating EventPlanner data:', req.body); // Debugging: log incoming data
-    const { Name, AssignedEvent, SalaryForTheEvent, Email, ContactNumber } = req.body;
 
     if (!Name || !AssignedEvent || !SalaryForTheEvent || !Email || !ContactNumber) {
         return res.status(400).json({
-            message: 'All fields are required:Name, AssignedEvent, SalaryForTheEvent, Email, ContactNumber'
+            message: 'All fields are required: Name, AssignedEvent, SalaryForTheEvent, Email, ContactNumber'
         });
     }
     next();
@@ -24,7 +24,7 @@ router.post('/add', validateEventPlanner, async (req, res, next) => {
         const newEventPlanner = await EventPlanner.create(req.body);
         return res.status(201).json(newEventPlanner);
     } catch (error) {
-        next(error);
+        next(error); // Pass error to the error handling middleware
     }
 });
 
@@ -54,7 +54,6 @@ router.get('/search', async (req, res, next) => {
     }
 });
 
-
 // GET Route to retrieve an event by ID
 router.get('/:id', async (req, res, next) => {
     try {
@@ -62,7 +61,7 @@ router.get('/:id', async (req, res, next) => {
         const eventPlanner = await EventPlanner.findById(id);
 
         if (!eventPlanner) {
-            return res.status(404).json({ message: 'Event planner is not found' });
+            return res.status(404).json({ message: 'Event planner not found' });
         }
 
         return res.status(200).json(eventPlanner);
@@ -78,7 +77,7 @@ router.put('/:id', validateEventPlanner, async (req, res, next) => {
         const updatedEventPlanner = await EventPlanner.findByIdAndUpdate(id, req.body, { new: true });
 
         if (!updatedEventPlanner) {
-            return res.status(404).json({ message: 'Event planner is not found' });
+            return res.status(404).json({ message: 'Event planner not found' });
         }
 
         return res.status(200).json({ message: 'Event planner updated successfully', updatedEventPlanner });
@@ -94,7 +93,7 @@ router.delete('/:id', async (req, res, next) => {
         const deletedEventPlanner = await EventPlanner.findByIdAndDelete(id);
 
         if (!deletedEventPlanner) {
-            return res.status(404).json({ message: 'Event planner is not found' });
+            return res.status(404).json({ message: 'Event planner not found' });
         }
 
         return res.status(200).json({ message: 'Event planner deleted successfully' });

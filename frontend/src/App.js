@@ -22,7 +22,7 @@ function App() {
       <ToastContainer/>
       <Loading />
       {/* Conditionally render Header based on the current route */}
-      {location.pathname !== '/' && <Header />}
+      
       <AppRoutes />
     </>
   );

@@ -22,9 +22,15 @@ export default function AddEventPlanner() {
     let tempErrors = { name: "", assignedEvent: "", salary: "", email: "", contactNumber: "" };
     let isValid = true;
 
-    // Validation for name
+    // Enhanced validation for name
     if (Name.trim() === "") {
       tempErrors.name = "Name is required.";
+      isValid = false;
+    } else if (Name.trim().length < 3) {
+      tempErrors.name = "Name must be at least 3 characters.";
+      isValid = false;
+    } else if (/\d/.test(Name)) {
+      tempErrors.name = "Name should not contain numbers.";
       isValid = false;
     }
 
@@ -34,21 +40,30 @@ export default function AddEventPlanner() {
       isValid = false;
     }
 
-    // Validation for contact number
-    if (ContactNumber.length !== 10 || !/^\d+$/.test(ContactNumber)) {
-      tempErrors.contactNumber = "Contact number must be 10 digits.";
+    // Enhanced validation for contact number
+    if (ContactNumber === "") {
+      tempErrors.contactNumber = "Contact number is required.";
+      isValid = false;
+    } else if (!/^\d{10}$/.test(ContactNumber)) {
+      tempErrors.contactNumber = "Contact number must be exactly 10 digits.";
       isValid = false;
     }
 
-    // Validation for email
-    if (!Email.includes("@") || !Email.includes(".")) {
-      tempErrors.email = "Email must be valid.";
+    // Enhanced validation for email
+    if (Email === "") {
+      tempErrors.email = "Email is required.";
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(Email)) {
+      tempErrors.email = "Please enter a valid email address.";
       isValid = false;
     }
 
-    // Validation for salary
-    if (!Salary) {
+    // Enhanced validation for salary
+    if (Salary === "") {
       tempErrors.salary = "Salary is required.";
+      isValid = false;
+    } else if (isNaN(Salary) || parseFloat(Salary) <= 0) {
+      tempErrors.salary = "Please enter a valid positive number.";
       isValid = false;
     }
 
@@ -61,24 +76,46 @@ export default function AddEventPlanner() {
     let tempErrors = { ...errors };
     switch (field) {
       case "name":
-        tempErrors.name = value.trim() === "" ? "Name is required." : "";
+        if (value.trim() === "") {
+          tempErrors.name = "Name is required.";
+        } else if (value.trim().length < 3) {
+          tempErrors.name = "Name must be at least 3 characters.";
+        } else if (/\d/.test(value)) {
+          tempErrors.name = "Name should not contain numbers.";
+        } else {
+          tempErrors.name = "";
+        }
         break;
       case "assignedEvent":
-        tempErrors.assignedEvent = value === "" ? "Assigned planner is required." : "";
+        tempErrors.assignedEvent = value === "" ? "Assigned event is required." : "";
         break;
       case "contactNumber":
-        tempErrors.contactNumber =
-          value.length !== 10 || !/^\d+$/.test(value) ? "Contact number must be 10 digits." : "";
+        if (value === "") {
+          tempErrors.contactNumber = "Contact number is required.";
+        } else if (!/^\d{10}$/.test(value)) {
+          tempErrors.contactNumber = "Contact number must be exactly 10 digits.";
+        } else {
+          tempErrors.contactNumber = "";
+        }
         break;
       case "email":
-        tempErrors.email =
-          !value.includes("@") || !value.includes(".") ? "Email must be valid." : "";
+        if (value === "") {
+          tempErrors.email = "Email is required.";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          tempErrors.email = "Please enter a valid email address.";
+        } else {
+          tempErrors.email = "";
+        }
         break;
       case "salary":
-        const salaryValue = parseFloat(value);
-        tempErrors.salary = value.trim() === "" || isNaN(salaryValue) || salaryValue < 0 ? "Enter a valid salary value." : "";
+        if (value === "") {
+          tempErrors.salary = "Salary is required.";
+        } else if (isNaN(value) || parseFloat(value) <= 0) {
+          tempErrors.salary = "Please enter a valid positive number.";
+        } else {
+          tempErrors.salary = "";
+        }
         break;
-
       default:
         break;
     }
@@ -116,11 +153,12 @@ export default function AddEventPlanner() {
       });
   }
 
+  // ... (rest of your styles remain exactly the same)
   const containerStyle = {
     display: "flex",
-    justifyContent: "center",  // Horizontally centers the form
-    alignItems: "center",      // Vertically centers the form
-    minHeight: "100vh",        // Makes the container take up the full viewport height
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
   };
   
   const formContainerStyle = {
@@ -137,7 +175,6 @@ export default function AddEventPlanner() {
     alignItems: "center",
   };
   
-
   const formGroupStyle = {
     marginBottom: "15px",
     width: "100%",
@@ -183,11 +220,12 @@ export default function AddEventPlanner() {
               placeholder="Enter the Name"
               onChange={(e) => {
                 setName(e.target.value);
-                validateField("name", e.target.value); // Validate on change
+                validateField("name", e.target.value);
               }}
+              onBlur={(e) => validateField("name", e.target.value)}
               value={Name}
             />
-            {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+            {errors.name && <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>{errors.name}</p>}
           </div>
           <div style={formGroupStyle}>
             <label htmlFor="InputAssignedEvent">Assigned Event</label>
@@ -196,15 +234,16 @@ export default function AddEventPlanner() {
               id="InputAssignedEvent"
               onChange={(e) => {
                 setAssignedEvent(e.target.value);
-                validateField("assignedEvent", e.target.value); // Validate on change
+                validateField("assignedEvent", e.target.value);
               }}
+              onBlur={(e) => validateField("assignedEvent", e.target.value)}
               value={AssignedEvent}
             >
               <option value="">Select Assigned Event</option>
               <option value="Inside Events">Inside Events</option>
               <option value="Outside Events">Outside Events</option>
             </select>
-            {errors.assignedEvent && <p style={{ color: "red" }}>{errors.assignedEvent}</p>}
+            {errors.assignedEvent && <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>{errors.assignedEvent}</p>}
           </div>
           <div style={formGroupStyle}>
             <label htmlFor="InputSalary">Salary</label>
@@ -215,11 +254,12 @@ export default function AddEventPlanner() {
               placeholder="Enter the Salary"
               onChange={(e) => {
                 setSalary(e.target.value);
-                validateField("salary", e.target.value); // Validate on change
+                validateField("salary", e.target.value);
               }}
+              onBlur={(e) => validateField("salary", e.target.value)}
               value={Salary}
             />
-            {errors.salary && <p style={{ color: "red" }}>{errors.salary}</p>}
+            {errors.salary && <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>{errors.salary}</p>}
           </div>
           <div style={formGroupStyle}>
             <label htmlFor="InputEmail">Email</label>
@@ -230,11 +270,12 @@ export default function AddEventPlanner() {
               placeholder="Enter the Email"
               onChange={(e) => {
                 setEmail(e.target.value);
-                validateField("email", e.target.value); // Validate on change
+                validateField("email", e.target.value);
               }}
+              onBlur={(e) => validateField("email", e.target.value)}
               value={Email}
             />
-            {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
+            {errors.email && <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>{errors.email}</p>}
           </div>
           <div style={formGroupStyle}>
             <label htmlFor="InputContactNumber">Contact Number</label>
@@ -245,11 +286,13 @@ export default function AddEventPlanner() {
               placeholder="Enter the Contact Number"
               onChange={(e) => {
                 setContactNumber(e.target.value);
-                validateField("contactNumber", e.target.value); // Validate on change
+                validateField("contactNumber", e.target.value);
               }}
+              onBlur={(e) => validateField("contactNumber", e.target.value)}
               value={ContactNumber}
+              maxLength="10"
             />
-            {errors.contactNumber && <p style={{ color: "red" }}>{errors.contactNumber}</p>}
+            {errors.contactNumber && <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>{errors.contactNumber}</p>}
           </div>
           <div style={buttonContainerStyle}>
             <button type="submit" style={buttonStyle}>

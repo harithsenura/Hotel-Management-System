@@ -129,6 +129,34 @@ router.get("/get/:id", async (req, res) => {
     res.status(500).send({ status: "Error fetching room", error: error.message });
   }
 });
+router.patch("/updateStatus/:roomNumber", async (req, res) => {
+  const roomNumber = req.params.roomNumber;
+  const { status } = req.body;
+
+  // Ensure that the new status is provided
+  if (!status) {
+    return res.status(400).json({ error: "Status is required" });
+  }
+
+  try {
+    // Find the room by its roomNumber and update the status
+    const updatedRoom = await Room.findOneAndUpdate(
+      { roomNumber }, // Find room by roomNumber
+      { status }, // Update status
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedRoom) {
+      return res.status(404).json({ error: "Room not found" });
+    }
+
+    res.status(200).json({ message: "Room status updated", room: updatedRoom });
+  } catch (error) {
+    console.error("Error updating room status:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 
 // Export the router using ES6 export
 export default router;

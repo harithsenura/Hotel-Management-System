@@ -21,8 +21,10 @@ const AddCustomer = () => {
   const [errors, setErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState('success'); // 'success' or 'error'
   const [availableRooms, setAvailableRooms] = useState([]);
   const [isFetchingRooms, setIsFetchingRooms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch available rooms whenever roomType changes
   useEffect(() => {
@@ -42,9 +44,7 @@ const AddCustomer = () => {
           console.error("Error fetching available rooms:", error);
           setAvailableRooms([]);
           setCustomerData(prevData => ({ ...prevData, roomNumber: "" }));
-          setAlertMessage('Error fetching available rooms');
-          setShowAlert(true);
-          setTimeout(() => setShowAlert(false), 3000);
+          showAlertMessage('Error fetching available rooms', 'error');
         } finally {
           setIsFetchingRooms(false);
         }
@@ -57,8 +57,25 @@ const AddCustomer = () => {
     fetchAvailableRooms();
   }, [customerData.roomType]);
 
+  const showAlertMessage = (message, type = 'success') => {
+    setAlertMessage(message);
+    setAlertType(type);
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 3000);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prevErrors => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+    
     setCustomerData({
       ...customerData,
       [name]: value
@@ -67,40 +84,77 @@ const AddCustomer = () => {
 
   const validate = () => {
     let tempErrors = {};
+    const currentDate = new Date().toISOString().split('T')[0];
 
-    if (!customerData.name) {
+    // Name validation
+    if (!customerData.name.trim()) {
       tempErrors.name = "Name is required";
     } else if (/\d/.test(customerData.name)) {
       tempErrors.name = "Name must not contain numbers";
+    } else if (customerData.name.trim().length < 3) {
+      tempErrors.name = "Name must be at least 3 characters";
     }
 
-    if (!customerData.contactNumber || !/^\d{10}$/.test(customerData.contactNumber)) {
+    // Contact number validation
+    if (!customerData.contactNumber.trim()) {
+      tempErrors.contactNumber = "Contact number is required";
+    } else if (!/^\d{10}$/.test(customerData.contactNumber)) {
       tempErrors.contactNumber = "Contact number must be 10 digits";
     }
 
-    if (!customerData.email || !/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(customerData.email)) {
+    // Email validation
+    if (!customerData.email.trim()) {
+      tempErrors.email = "Email is required";
+    } else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(customerData.email)) {
       tempErrors.email = "Invalid email format";
     }
 
-    if (!customerData.gender) tempErrors.gender = "Gender is required";
+    // Gender validation
+    if (!customerData.gender) {
+      tempErrors.gender = "Gender is required";
+    }
 
-    if (!customerData.nationality) {
+    // Nationality validation
+    if (!customerData.nationality.trim()) {
       tempErrors.nationality = "Nationality is required";
     } else if (/\d/.test(customerData.nationality)) {
       tempErrors.nationality = "Nationality must not contain numbers";
     }
 
-    if (!customerData.address) tempErrors.address = "Address is required";
-    if (!customerData.nicPassport) tempErrors.nicPassport = "NIC/Passport is required";
-    if (!customerData.checkInDate) tempErrors.checkInDate = "Check-In date is required";
-    if (!customerData.roomType) tempErrors.roomType = "Room type is required";
+    // Address validation
+    if (!customerData.address.trim()) {
+      tempErrors.address = "Address is required";
+    } else if (customerData.address.trim().length < 5) {
+      tempErrors.address = "Address must be at least 5 characters";
+    }
 
+    // NIC/Passport validation
+    if (!customerData.nicPassport.trim()) {
+      tempErrors.nicPassport = "NIC/Passport is required";
+    }
+
+    // Check-in date validation
+    if (!customerData.checkInDate) {
+      tempErrors.checkInDate = "Check-In date is required";
+    } else if (customerData.checkInDate < currentDate) {
+      tempErrors.checkInDate = "Check-In date cannot be in the past";
+    }
+
+    // Room type validation
+    if (!customerData.roomType) {
+      tempErrors.roomType = "Room type is required";
+    }
+
+    // Room number validation
     if (!customerData.roomNumber) {
       tempErrors.roomNumber = "Room number is required";
     }
 
-    if (!customerData.price || isNaN(customerData.price)) {
-      tempErrors.price = "Price must be a number";
+    // Price validation
+    if (!customerData.price) {
+      tempErrors.price = "Price is required";
+    } else if (isNaN(customerData.price) || parseFloat(customerData.price) <= 0) {
+      tempErrors.price = "Price must be a positive number";
     }
 
     setErrors(tempErrors);
@@ -109,21 +163,23 @@ const AddCustomer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
+    if (isSubmitting) return;
+    
     if (validate()) {
+      setIsSubmitting(true);
       try {
-        // Optionally, you can first update the room status to "Booked"
-        // This ensures that the room is not available for other customers
+        // First update the room status to "Booked"
         await axios.patch(`http://localhost:5000/room/updateStatus/${customerData.roomNumber}`, {
           status: "Booked"
         });
 
-        // Then, add the customer
+        // Then add the customer
         await axios.post("http://localhost:5000/customer/add", customerData);
 
-        setAlertMessage('Customer Added Successfully');
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000);
+        showAlertMessage('Customer Added Successfully');
+        
+        // Reset form
         setCustomerData({
           name: "",
           contactNumber: "",
@@ -141,9 +197,10 @@ const AddCustomer = () => {
         setAvailableRooms([]);
       } catch (error) {
         console.error("Error adding customer:", error);
-        setAlertMessage('Error Adding Customer');
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000);
+        const errorMessage = error.response?.data?.message || 'Error Adding Customer';
+        showAlertMessage(errorMessage, 'error');
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -152,19 +209,19 @@ const AddCustomer = () => {
     <>
       <SideBar />
       <div style={formContainerStyle}>
-        <h2>Add Customer</h2>
+        <h2 style={headingStyle}>Add Customer</h2>
         <form onSubmit={handleSubmit} style={formStyle}>
           {/* Common Input Fields */}
           {[
-            { label: "Name", name: "name", type: "text" },
-            { label: "Contact Number", name: "contactNumber", type: "text" },
-            { label: "Email", name: "email", type: "email" },
-            { label: "Nationality", name: "nationality", type: "text" },
-            { label: "Address", name: "address", type: "text" },
-            { label: "NIC/Passport Number", name: "nicPassport", type: "text" },
+            { label: "Name", name: "name", type: "text", placeholder: "Enter full name" },
+            { label: "Contact Number", name: "contactNumber", type: "text", placeholder: "Enter 10-digit number" },
+            { label: "Email", name: "email", type: "email", placeholder: "Enter email address" },
+            { label: "Nationality", name: "nationality", type: "text", placeholder: "Enter nationality" },
+            { label: "Address", name: "address", type: "text", placeholder: "Enter full address" },
+            { label: "NIC/Passport Number", name: "nicPassport", type: "text", placeholder: "Enter NIC/Passport" },
             { label: "Check-In Date", name: "checkInDate", type: "date" },
-            { label: "Price", name: "price", type: "number" }
-          ].map(({ label, name, type }) => (
+            { label: "Price (USD)", name: "price", type: "number", placeholder: "Enter price" }
+          ].map(({ label, name, type, placeholder }) => (
             <div key={name} style={formGroupStyle}>
               <label style={labelStyle}>{label}</label>
               <input
@@ -172,7 +229,9 @@ const AddCustomer = () => {
                 name={name}
                 value={customerData[name]}
                 onChange={handleChange}
-                style={inputStyle}
+                style={errors[name] ? { ...inputStyle, borderColor: 'red' } : inputStyle}
+                placeholder={placeholder}
+                disabled={isSubmitting}
               />
               {errors[name] && <span style={errorStyle}>{errors[name]}</span>}
             </div>
@@ -185,7 +244,8 @@ const AddCustomer = () => {
               name="gender"
               value={customerData.gender}
               onChange={handleChange}
-              style={inputStyle}
+              style={errors.gender ? { ...inputStyle, borderColor: 'red' } : inputStyle}
+              disabled={isSubmitting}
             >
               <option value="">Select Gender</option>
               <option value="male">Male</option>
@@ -202,7 +262,8 @@ const AddCustomer = () => {
               name="roomType"
               value={customerData.roomType}
               onChange={handleChange}
-              style={inputStyle}
+              style={errors.roomType ? { ...inputStyle, borderColor: 'red' } : inputStyle}
+              disabled={isSubmitting}
             >
               <option value="">Select Room Type</option>
               <option value="Single">Single</option>
@@ -221,8 +282,8 @@ const AddCustomer = () => {
               name="roomNumber"
               value={customerData.roomNumber}
               onChange={handleChange}
-              style={inputStyle}
-              disabled={!customerData.roomType || isFetchingRooms}
+              style={errors.roomNumber ? { ...inputStyle, borderColor: 'red' } : inputStyle}
+              disabled={!customerData.roomType || isFetchingRooms || isSubmitting}
             >
               <option value="">
                 {isFetchingRooms
@@ -246,15 +307,23 @@ const AddCustomer = () => {
             {errors.roomNumber && <span style={errorStyle}>{errors.roomNumber}</span>}
           </div>
 
-          <button type="submit" style={buttonStyle} disabled={!customerData.roomNumber}>
-            Add Customer
+          <button 
+            type="submit" 
+            style={isSubmitting ? { ...buttonStyle, opacity: 0.7 } : buttonStyle}
+            disabled={isSubmitting || !customerData.roomNumber}
+          >
+            {isSubmitting ? 'Adding...' : 'Add Customer'}
           </button>
         </form>
 
         <AnimatePresence>
           {showAlert && (
             <motion.div
-              style={alertStyle}
+              style={{
+                ...alertStyle,
+                backgroundColor: alertType === 'success' ? '#d4edda' : '#f8d7da',
+                color: alertType === 'success' ? '#155724' : '#721c24'
+              }}
               initial={{ opacity: 0, x: '100%' }}
               animate={{ opacity: 1, x: '0%' }}
               exit={{ opacity: 0, x: '100%' }}
@@ -273,10 +342,16 @@ const formContainerStyle = {
   maxWidth: '800px',
   padding: '20px',
   marginTop: "20px",
-  marginLeft: "480px", // Adjusted to align with SideBar width
+  marginLeft: "480px",
   backgroundColor: '#f9f9f9',
   borderRadius: '8px',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+};
+
+const headingStyle = {
+  color: '#800000',
+  marginBottom: '20px',
+  textAlign: 'center'
 };
 
 const formStyle = {
@@ -289,21 +364,25 @@ const formGroupStyle = {
   flex: '1 1 45%',
   display: 'flex',
   flexDirection: 'column',
+  minWidth: '250px'
 };
 
 const labelStyle = {
   marginBottom: '5px',
   fontWeight: 'bold',
+  color: '#333'
 };
 
 const inputStyle = {
-  padding: '8px',
+  padding: '10px',
   borderRadius: '4px',
-  border: '1px solid #ccc',
+  border: '1px solid #ddd',
+  fontSize: '14px',
+  transition: 'border 0.3s',
 };
 
 const buttonStyle = {
-  padding: '10px 20px',
+  padding: '12px 24px',
   backgroundColor: '#800000',
   color: '#fff',
   border: 'none',
@@ -311,12 +390,13 @@ const buttonStyle = {
   cursor: 'pointer',
   marginTop: '20px',
   alignSelf: 'flex-start',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  transition: 'opacity 0.3s',
 };
 
 const alertStyle = {
-  backgroundColor: '#ffffff',
-  color: '#800000',
-  padding: '10px',
+  padding: '15px',
   borderRadius: '5px',
   marginTop: '20px',
   textAlign: 'center',
@@ -326,11 +406,14 @@ const alertStyle = {
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
   zIndex: 1000,
   width: '300px',
+  border: '1px solid transparent'
 };
 
 const errorStyle = {
   color: 'red',
   fontSize: '12px',
+  marginTop: '5px',
+  height: '12px'
 };
 
 export default AddCustomer;

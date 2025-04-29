@@ -144,54 +144,54 @@ export default function UpdateEmpProfile() {
 
   return (
     <>
-      <SideBar/>
-    <div style={{ padding: "50px", width: "calc(100% - 250px)", boxSizing: "border-box", marginLeft: "250px" }}>
-      <h1>Employee Update</h1>
-      <div style={formStyle}>
-        <form onSubmit={handleSubmit}>
-          <div style={containerStyle}>
-            <div className="form-group">
-              <label htmlFor="name" style={labelStyle}>Name</label>
-              <input type="text" id="name" name="name" value={employee.name} onChange={handleChange} style={inputStyle} required />
+      <SideBar />
+      <div style={{ padding: "50px", width: "calc(100% - 250px)", boxSizing: "border-box", marginLeft: "250px" }}>
+        <h1>Employee Update</h1>
+        <div style={formStyle}>
+          <form onSubmit={handleSubmit}>
+            <div style={containerStyle}>
+              <div className="form-group">
+                <label htmlFor="name" style={labelStyle}>Name</label>
+                <input type="text" id="name" name="name" value={employee.name} onChange={handleChange} style={inputStyle} required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email" style={labelStyle}>Email</label>
+                <input type="email" id="email" name="email" value={employee.email} onChange={handleChange} style={inputStyle} required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="mobile" style={labelStyle}>Mobile No</label>
+                <input type="text" id="mobile" name="mobile" value={employee.mobile} onChange={handleChange} style={inputStyle} required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="nic" style={labelStyle}>NIC</label>
+                <input type="text" id="nic" name="nic" value={employee.nic} onChange={handleChange} style={inputStyle} required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="designation" style={labelStyle}>Designation</label>
+                <input type="text" id="designation" name="designation" value={employee.designation} onChange={handleChange} style={inputStyle} required disabled />
+              </div>
+              <div className="form-group">
+                <label htmlFor="empid" style={labelStyle}>Employee ID</label>
+                <input type="text" id="empid" name="empid" value={employee.empid} onChange={handleChange} style={inputStyle} required disabled />
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="email" style={labelStyle}>Email</label>
-              <input type="email" id="email" name="email" value={employee.email} onChange={handleChange} style={inputStyle} required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="mobile" style={labelStyle}>Mobile No</label>
-              <input type="text" id="mobile" name="mobile" value={employee.mobile} onChange={handleChange} style={inputStyle} required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="nic" style={labelStyle}>NIC</label>
-              <input type="text" id="nic" name="nic" value={employee.nic} onChange={handleChange} style={inputStyle} required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="designation" style={labelStyle}>Designation</label>
-              <input type="text" id="designation" name="designation" value={employee.designation} onChange={handleChange} style={inputStyle} required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="empid" style={labelStyle}>Employee ID</label>
-              <input type="text" id="empid" name="empid" value={employee.empid} onChange={handleChange} style={inputStyle} required />
-            </div>
-          </div>
-          <button type="submit" style={buttonStyle}>Update</button>
-        </form>
-      </div>
+            <button type="submit" style={buttonStyle}>Update</button>
+          </form>
+        </div>
 
-      <AnimatePresence>
-        {showAlert && (
-          <motion.div
-            style={alertStyle}
-            initial={{ transform: "translateX(100%)" }}
-            animate={{ transform: "translateX(0)" }}
-            exit={{ transform: "translateX(100%)" }}
-          >
-            {alertMessage}
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {showAlert && (
+            <motion.div
+              style={alertStyle}
+              initial={{ transform: "translateX(100%)" }}
+              animate={{ transform: "translateX(0)" }}
+              exit={{ transform: "translateX(100%)" }}
+            >
+              {alertMessage}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      </>
+    </>
   );
 }
