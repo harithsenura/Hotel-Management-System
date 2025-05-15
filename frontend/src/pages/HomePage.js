@@ -12,7 +12,7 @@ import fblogo from "../images/f.png"
 import twitterlogo from "../images/t.png"
 import companylogo from "../images/company.png"
 import headingImage from "../images/bg1.JPG"
-import { ChevronRight, Gift, Star, Users, Utensils, Calendar, LogOut, Package } from "lucide-react"
+import { ChevronRight, Gift, Star, Users, Utensils, Calendar, LogOut, Package, User } from 'lucide-react'
 // Add this import at the top with other imports
 import axios from "axios"
 import Gifts from "../images/gift.jpg";
@@ -212,16 +212,21 @@ const HomePage = () => {
   }
 
   // Update the room image handling function to properly display images from the server
-  // Add this function after the getStatusStyle function and before the isLoading check
+  // UPDATED: Changed localhost URL to production URL
   const getRoomImageUrl = (room) => {
     if (room.images && room.images.length > 0) {
       // If room has multiple images, return the array of image URLs
-      return room.images.map((img) => `http://localhost:5001${img}`)
+      return room.images.map((img) => `https://welcoming-wisdom-production.up.railway.app${img}`)
     } else if (room.image) {
       // For backward compatibility with rooms that have a single image
-      return [`http://localhost:5001${room.image}`]
+      return [`https://welcoming-wisdom-production.up.railway.app${room.image}`]
     }
     return [`/placeholder.svg?height=300&width=400&query=luxury ${room.roomType} hotel room`]
+  }
+
+  // Handle profile navigation
+  const handleProfileClick = () => {
+    navigate("/profile")
   }
 
   if (isLoading) {
@@ -1572,12 +1577,17 @@ const HomePage = () => {
                 </div>
                 <div className="user-menu-divider"></div>
                 <div className="user-menu-item" onClick={handleGiftSelection}>
+                  <Gift size={16} />
                   Gift Selection
                 </div>
                 <div className="user-menu-item" onClick={() => navigate("/gifts/ordered")}>
+                  <Package size={16} />
                   Ordered Gifts
                 </div>
-                <div className="user-menu-item">My Profile</div>
+                <div className="user-menu-item" onClick={handleProfileClick}>
+                  <User size={16} />
+                  My Profile
+                </div>
                 <div className="user-menu-item" onClick={() => navigate("/orders")}>
                   <Package size={16} />
                   My Orders
@@ -1651,7 +1661,7 @@ const HomePage = () => {
             </button>
           </div>
           <div className="novelty-image-container">
-            <img src={Gifts} alt="Wedding Gift Selection" className="novelty-image" />
+            <img src={Gifts || "/placeholder.svg"} alt="Wedding Gift Selection" className="novelty-image" />
             <div className="novelty-badge">
               <span>NEW</span>
               <span>Feature</span>
