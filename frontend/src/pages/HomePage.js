@@ -13,7 +13,6 @@ import twitterlogo from "../images/t.png"
 import companylogo from "../images/company.png"
 import headingImage from "../images/bg1.JPG"
 import { ChevronRight, Gift, Star, Users, Utensils, Calendar, LogOut, Package, User } from 'lucide-react'
-// Add this import at the top with other imports
 import axios from "axios"
 import Gifts from "../images/gift.jpg";
 
@@ -26,16 +25,33 @@ const HomePage = () => {
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [user, setUser] = useState(null)
   const [showLoginRequiredModal, setShowLoginRequiredModal] = useState(false)
-  // Add this state inside the HomePage component, after other useState declarations
   const [rooms, setRooms] = useState([])
   const [roomsLoading, setRoomsLoading] = useState(true)
   const [showFoodLoginRequiredModal, setShowFoodLoginRequiredModal] = useState(false)
   const [currentImageIndices, setCurrentImageIndices] = useState({})
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   // Get user from localStorage using your service
   useEffect(() => {
-    const currentUser = getUser()
-    setUser(currentUser)
+    const checkAuth = () => {
+      const currentUser = getUser()
+      if (currentUser && currentUser._id) {
+        setUser(currentUser)
+        setIsAuthenticated(true)
+      } else {
+        setUser(null)
+        setIsAuthenticated(false)
+      }
+    }
+
+    // Check auth on initial load
+    checkAuth()
+
+    // Set up an interval to periodically check auth status
+    const authCheckInterval = setInterval(checkAuth, 5000)
+
+    // Clean up interval on component unmount
+    return () => clearInterval(authCheckInterval)
   }, [])
 
   // Handle scroll events for navbar transparency
@@ -127,9 +143,9 @@ const HomePage = () => {
   }, [rooms])
 
   const handleOrderClick = () => {
-    if (!user) {
+    if (!isAuthenticated) {
       // Show login popup message if user is not logged in
-      setShowLoginRequiredModal(true)
+      setShowFoodLoginRequiredModal(true)
     } else {
       navigate("/home") // Navigate to the items page
     }
@@ -148,7 +164,7 @@ const HomePage = () => {
   }
 
   const handleGiftSelection = () => {
-    if (!user) {
+    if (!isAuthenticated) {
       // Show login popup message
       setShowLoginRequiredModal(true)
     } else {
@@ -159,6 +175,7 @@ const HomePage = () => {
   const handleLogout = () => {
     logout() // Use your logout function
     setUser(null)
+    setIsAuthenticated(false)
     setShowUserMenu(false)
     navigate("/")
   }
@@ -212,7 +229,6 @@ const HomePage = () => {
   }
 
   // Update the room image handling function to properly display images from the server
-  // UPDATED: Changed localhost URL to production URL
   const getRoomImageUrl = (room) => {
     if (room.images && room.images.length > 0) {
       // If room has multiple images, return the array of image URLs
@@ -1561,7 +1577,7 @@ const HomePage = () => {
           </a>
         </div>
 
-        {user ? (
+        {isAuthenticated ? (
           <div style={{ position: "relative" }}>
             <div className="user-avatar" onClick={toggleUserMenu}>
               {getUserInitial()}
@@ -1913,6 +1929,8 @@ const HomePage = () => {
             </p>
             <div className="testimonial-author">
               <img src="/romantic-couple.png" alt="David & Lisa" className="author-avatar" />
+              <div className="author-info">
+                <div className="author-name">David & Lisa</div>  />
               <div className="author-info">
                 <div className="author-name">David & Lisa</div>
                 <div className="author-title">Anniversary Celebration</div>
