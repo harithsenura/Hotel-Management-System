@@ -1,18 +1,24 @@
-import pkg from 'jsonwebtoken';
-const { verify } = pkg;
-
-import { UNAUTHORIZED } from '../constants/httpStatus.js';
+import jwt from "jsonwebtoken"
+import { UNAUTHORIZED } from "../constants/httpStatus.js"
 
 export default (req, res, next) => {
-    const token = req.headers.access_token;
-    if (!token) return res.status(UNAUTHORIZED).send();
+  try {
+    // Get the token from the Authorization header
+    const token = req.headers.authorization?.split(" ")[1]
 
-    try {
-        const decoded = verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-    } catch (error) {
-        res.status(UNAUTHORIZED).send();
+    if (!token) {
+      return res.status(UNAUTHORIZED).send("Access denied. No token provided.")
     }
 
-    return next();
-};
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+    // Add the decoded user to the request object
+    req.user = decoded
+
+    next()
+  } catch (error) {
+    console.error("Auth middleware error:", error)
+    res.status(UNAUTHORIZED).send("Invalid token")
+  }
+}

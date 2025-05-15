@@ -1,37 +1,43 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose"
 
-const billSchema = new mongoose.Schema({
+const billSchema = new mongoose.Schema(
+  {
     customerName: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     customerNumber: {
-        type: Number,
-        required: true,
+      type: String,
+      required: true,
     },
     totalAmount: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
     subTotal: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
     tax: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
     paymentMode: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     cartItems: {
-        type: Array,
-        required: true,
+      type: Array,
+      required: true,
     },
-}, 
-{ timestamps: true });
+    userId: {
+      type: String,
+      required: false, // Not required for backward compatibility
+    },
+  },
+  { timestamps: true },
+)
 
-const Bills = mongoose.model("Bills", billSchema);
+const Bills = mongoose.model("Bills", billSchema)
 
-export default Bills;
+export default Bills

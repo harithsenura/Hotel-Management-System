@@ -17,7 +17,7 @@ export default function CustomerList() {
 
   useEffect(() => {
     function getCustomers() {
-      axios.get("http://localhost:5000/customer")
+      axios.get("http://localhost:5001/customer")
         .then((res) => setCustomers(res.data))
         .catch((err) => alert(err.message));
     }
@@ -32,7 +32,7 @@ export default function CustomerList() {
 
   const handleDelete = () => {
     if (confirmDialogData) {
-      axios.delete(`http://localhost:5000/customer/delete/${confirmDialogData._id}`)
+      axios.delete(`http://localhost:5001/customer/delete/${confirmDialogData._id}`)
         .then(() => {
           setAlertMessage("Customer deleted successfully!");
           setShowAlert(true);

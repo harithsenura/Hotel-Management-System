@@ -1,31 +1,47 @@
+/* Add these styles if they don't already exist in your CSS module */
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    margin-top: 3rem;
-}
-
-.details {
-    width: 28rem;
-}
-
-.details form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.register {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: rgb(0, 0, 0);
-    border-radius: 10px;
-}
-
-.register a {
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    font-size: 1rem;
-}
+    height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+  .details {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .register {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  .register a {
+    color: #dc143c;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .register a:hover {
+    text-decoration: underline;
+  }
+  
+  .errorContainer {
+    background-color: #fee2e2;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .errorText {
+    color: #b91c1c;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  

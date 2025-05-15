@@ -15,7 +15,7 @@ export default function AllLeaves() {
   }, []);
 
   const fetchLeaves = () => {
-    axios.get("http://localhost:5000/leave/all")
+    axios.get("http://localhost:5001/leave/all")
       .then((res) => setLeaves(res.data))
       .catch((err) => {
         console.error(err);
@@ -24,7 +24,7 @@ export default function AllLeaves() {
   };
 
   const handleUpdateApproval = (leaveId, status) => {
-    axios.put(`http://localhost:5000/leave/update-approval/${leaveId}`, { approval: status })
+    axios.put(`http://localhost:5001/leave/update-approval/${leaveId}`, { approval: status })
       .then((res) => {
         setAlertMessage(`Leave ${status.toLowerCase()} successfully!`);
         setShowAlert(true);
@@ -49,7 +49,7 @@ export default function AllLeaves() {
 
   const handleDelete = () => {
     if (confirmDialogData) {
-      axios.delete(`http://localhost:5000/leave/delete/${confirmDialogData._id}`)
+      axios.delete(`http://localhost:5001/leave/delete/${confirmDialogData._id}`)
         .then(() => {
           setAlertMessage("Leave request deleted successfully!");
           setShowAlert(true);

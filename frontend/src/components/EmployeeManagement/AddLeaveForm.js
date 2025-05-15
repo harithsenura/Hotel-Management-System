@@ -115,7 +115,7 @@ function AddLeaveForm() {
       return; // Stop form submission
     }
 
-    axios.post('http://localhost:5000/leave/add', formData)
+    axios.post('http://localhost:5001/leave/add', formData)
       .then((res) => {
         setAlertMessage('Leave request added successfully');
         setShowAlert(true);

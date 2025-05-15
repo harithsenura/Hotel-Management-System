@@ -1,54 +1,48 @@
-import billsModel from '../models/billsModel.js';
+import Bills from "../models/billsModel.js"
 
-// Add bill
-const addBillsController = async (req, res) => {
-    try {
-        const newBill = new billsModel(req.body);
-        await newBill.save();
-        res.status(201).send("Bill Created Successfully!");
-    } catch (error) {
-        console.error("Error adding bill:", error);
-        res.status(500).send("Error adding bill");
-    }
-};
+// Controller to add a new bill
+export const addBillsController = async (req, res) => {
+  try {
+    const newBill = new Bills(req.body)
+    await newBill.save()
+    res.status(201).send("Bill created successfully")
+  } catch (error) {
+    res.status(400).send(error)
+  }
+}
 
-// Get bills
-const getBillsController = async (req, res) => {
-    try {
-        const bills = await billsModel.find();
-        res.status(200).json(bills);
-    } catch (error) {
-        console.error("Error fetching bills:", error);
-        res.status(500).send("Failed to get bills");
-    }
-};
+// Controller to get all bills
+export const getBillsController = async (req, res) => {
+  try {
+    const bills = await Bills.find().sort({ createdAt: -1 })
+    res.status(200).send(bills)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+}
 
-// Delete bill
-const deleteBillController = async (req, res) => {
-    try {
-        const { id } = req.params;
-        console.log("Delete request received for bill ID:", id);
+// Controller to get bills by user (name or phone number)
+export const getUserBillsController = async (req, res) => {
+  try {
+    const { userId } = req.params
 
-        // Check if the ID is a valid MongoDB ObjectId
-        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
-            return res.status(400).send("Invalid Bill ID format");
-        }
+    // Find bills by customer name or phone number
+    const bills = await Bills.find({
+      $or: [{ customerName: userId }, { customerNumber: userId }],
+    }).sort({ createdAt: -1 })
 
-        const deletedBill = await billsModel.findByIdAndDelete(id);
+    res.status(200).send(bills)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+}
 
-        if (!deletedBill) {
-            return res.status(404).send("Bill not found");
-        }
-
-        res.status(200).send("Bill deleted successfully");
-    } catch (error) {
-        console.error("Error deleting bill:", error);
-        res.status(500).send("Error deleting bill");
-    }
-};
-
-export {
-    addBillsController,
-    getBillsController,
-    deleteBillController,
-};
+// Controller to delete a bill
+export const deleteBillController = async (req, res) => {
+  try {
+    await Bills.findByIdAndDelete(req.params.id)
+    res.status(200).send("Bill deleted successfully")
+  } catch (error) {
+    res.status(400).send(error)
+  }
+}

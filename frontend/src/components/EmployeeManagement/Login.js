@@ -24,7 +24,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`http://localhost:5000/employee/login`, { email, mobile });
+      const res = await axios.post(`http://localhost:5001/employee/login`, { email, mobile });
 
       if (res.status === 200 && res.data.employee) {
         // Store employee data in sessionStorage

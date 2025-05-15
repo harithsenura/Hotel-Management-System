@@ -12,7 +12,7 @@ export default function CheckOutPage() {
 
   useEffect(() => {
     function getCustomers() {
-      axios.get("http://localhost:5000/customer")
+      axios.get("http://localhost:5001/customer")
         .then((res) => setCustomers(res.data))
         .catch((err) => alert(err.message));
     }

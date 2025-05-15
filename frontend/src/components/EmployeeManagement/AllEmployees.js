@@ -18,7 +18,7 @@ export default function AllEmployees() {
   useEffect(() => {
     function getEmployees() {
       axios
-        .get("http://localhost:5000/employee/")
+        .get("http://localhost:5001/employee/")
         .then((res) => setEmployees(res.data))
         .catch((err) => alert(err.message));
     }
@@ -34,7 +34,7 @@ export default function AllEmployees() {
     if (confirmDialogData) {
       axios
         .delete(
-          `http://localhost:5000/employee/delete/${confirmDialogData._id}`
+          `http://localhost:5001/employee/delete/${confirmDialogData._id}`
         )
         .then(() => {
           setAlertMessage("Employee deleted successfully!");

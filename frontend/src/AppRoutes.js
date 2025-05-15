@@ -49,6 +49,7 @@ import AdminLogin from "./components/EmployeeManagement/AdminLogin";
 import LoginAs from "./components/EmployeeManagement/LoginAs";
 import WebHome from './pages/HomePage';
 import AdminPannel from './pages/LoginForm';
+import Profile from './pages/Profile/profile'
 
 import BarCartPage from "./components/Bar/CartPage";
 import Homepage from "./components/Bar/Homepage";
@@ -56,6 +57,15 @@ import ItemsPage from "./components/Bar/ItemsPage";
 import BillsPage from "./components/Bar/BillsPage";
 import BarLogin from "./components/Bar/BarLogin";
 import Bardash from "./components/Bar/CustomerPage"
+import ShowEvents from './components/Gifts/showevents'
+import GiftSelect from "./components/Gifts/giftselect"
+import GiftsAdmin from "./components/Gifts/GiftsAdmin"
+import GiftPayment from "./components/Gifts/GiftPayment"
+import GiftStatus from './components/Gifts/GiftStatus'
+import OrdersList from './components/Gifts/OrdersList' // Import the OrdersList component
+import OrderDetails from './components/Gifts/OrderDetails' // Import the OrderDetails component
+import AllRooms from './components/CustomerManagement/all-rooms'
+import RoomPayment from "./components/CustomerManagement/room-payment"
 
 
 
@@ -72,6 +82,7 @@ export default function AppRoutes() {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/profile" element={<Profile />} />
 
 
       {/* Event Management */}
@@ -85,6 +96,17 @@ export default function AppRoutes() {
       <Route path="/adminpannel" element={<HomeDashboard />} /> {/* Fixed closing tag */}
       <Route path="/eventdashboard" element={<EventDashboard />} />
 
+      {/* Gifts */}
+      <Route path="/gifts/showevents" element={<ShowEvents />} />
+      <Route path="/gifts/select/:eventId" element={<GiftSelect />} />
+      <Route path="/gifts/admin" element={<GiftsAdmin />} />
+      <Route path="/gifts/payment" element={<GiftPayment />} />
+      <Route path="/gifts/status/:orderId" element={<GiftStatus />} />
+
+      {/* Orders */}
+      <Route path="/orders" element={<OrdersList />} /> {/* Add this new route for orders list */}
+      <Route path="/orders/:orderId" element={<OrderDetails />} /> {/* Add this new route for order details */}
+
       {/* Customer */}
       <Route path="/customers" element={<AllCustomers />} />
       <Route path="/customers/add" element={<AddCustomer />} />
@@ -94,6 +116,8 @@ export default function AppRoutes() {
       <Route path="/cuslogin" element={<CusLogin />} />
       <Route path="/rooms/add" element={<AddRoom />} />
       <Route path="/rooms" element={<RoomList />} />
+      <Route path="/all-rooms" element={<AllRooms />} />
+      <Route path="/room-payment" element={<RoomPayment />} />
 
       {/* Employee */}
       <Route path="/Employee" element={<AllEmployees />} />
@@ -152,7 +176,7 @@ export default function AppRoutes() {
           </AuthRoute>
         }
       />
-      
+
       <Route
         path="/dashboard"
         element={

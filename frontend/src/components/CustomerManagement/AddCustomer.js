@@ -32,7 +32,7 @@ const AddCustomer = () => {
       if (customerData.roomType) {
         setIsFetchingRooms(true);
         try {
-          const response = await axios.get("http://localhost:5000/room/available", {
+          const response = await axios.get("http://localhost:5001/room/available", {
             params: { roomType: customerData.roomType }
           });
           setAvailableRooms(response.data);
@@ -170,12 +170,12 @@ const AddCustomer = () => {
       setIsSubmitting(true);
       try {
         // First update the room status to "Booked"
-        await axios.patch(`http://localhost:5000/room/updateStatus/${customerData.roomNumber}`, {
+        await axios.patch(`http://localhost:5001/room/updateStatus/${customerData.roomNumber}`, {
           status: "Booked"
         });
 
         // Then add the customer
-        await axios.post("http://localhost:5000/customer/add", customerData);
+        await axios.post("http://localhost:5001/customer/add", customerData);
 
         showAlertMessage('Customer Added Successfully');
         
@@ -341,7 +341,7 @@ const AddCustomer = () => {
 const formContainerStyle = {
   maxWidth: '800px',
   padding: '20px',
-  marginTop: "20px",
+  marginTop: "160px",
   marginLeft: "480px",
   backgroundColor: '#f9f9f9',
   borderRadius: '8px',

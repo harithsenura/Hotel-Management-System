@@ -7,7 +7,7 @@ const UserList = () => {
 
     useEffect(() => {
         // Fetch user data without sending an Authorization token
-        fetch('http://localhost:5000/api/users/allusers', {
+        fetch('http://localhost:5001/api/users/allusers', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

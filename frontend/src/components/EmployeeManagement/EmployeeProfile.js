@@ -21,7 +21,7 @@ export default function UpdateEmployeeProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/employee/get/${id}`)
+      .get(`http://localhost:5001/employee/get/${id}`)
       .then((res) => {
         setEmployee(res.data.employee);
       })
@@ -85,7 +85,7 @@ export default function UpdateEmployeeProfile() {
     }
 
     axios
-      .put(`http://localhost:5000/employee/update/${id}`, employee)
+      .put(`http://localhost:5001/employee/update/${id}`, employee)
       .then(() => {
         setAlertMessage("Employee updated successfully!");
         setShowAlert(true);

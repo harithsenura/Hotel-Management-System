@@ -32,7 +32,7 @@ export default function UpdateCustomerProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/customer/get/${id}`)
+      .get(`http://localhost:5001/customer/get/${id}`)
       .then((res) => {
         setCustomer(res.data.customer);
       })
@@ -127,7 +127,7 @@ export default function UpdateCustomerProfile() {
     if (Object.keys(validationErrors).length === 0) {
       // If no errors, submit form
       axios
-        .put(`http://localhost:5000/customer/update/${id}`, customer)
+        .put(`http://localhost:5001/customer/update/${id}`, customer)
         .then(() => {
           setAlertMessage("Customer updated successfully!");
           setShowAlert(true);

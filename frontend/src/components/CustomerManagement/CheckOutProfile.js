@@ -15,7 +15,7 @@ export default function CheckOutProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/customer/get/${id}`)
+      .get(`http://localhost:5001/customer/get/${id}`)
       .then((res) => setCustomer(res.data.customer))
       .catch((err) => alert(err.message));
   }, [id]);
@@ -81,7 +81,7 @@ export default function CheckOutProfile() {
 
   const handleDelete = () => {
     axios
-      .delete(`http://localhost:5000/customer/delete/${id}`)
+      .delete(`http://localhost:5001/customer/delete/${id}`)
       .then(() => {
         setAlertMessage("Customer successfully checked out");
         setShowAlert(true);

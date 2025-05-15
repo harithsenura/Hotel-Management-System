@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { FaUsers, FaUserTie, FaMoneyBillWave, FaUtensils, FaCocktail, FaCalendarAlt } from "react-icons/fa"
+import { FaUsers, FaUserTie, FaMoneyBillWave, FaUtensils, FaCocktail, FaCalendarAlt, FaGift } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 
 // Dashboard component
@@ -93,15 +93,8 @@ const Dashboard = () => {
             index={2}
           />
           <Card
-            title="Restaurant Management"
-            content="Manage menus, tables, orders, and kitchen operations"
-            Icon={FaUtensils}
-            onClick={() => navigate("/dashboard")}
-            index={3}
-          />
-          <Card
-            title="Bar Management"
-            content="Track inventory, cocktail menus, and bar operations"
+            title="Resturent and Bar Management"
+            content="Track inventory, foods menus, and bar operations"
             Icon={FaCocktail}
             onClick={() => navigate("/barlogin")}
             index={4}
@@ -112,6 +105,13 @@ const Dashboard = () => {
             Icon={FaCalendarAlt}
             onClick={() => navigate("/eventlogin")}
             index={5}
+          />
+          <Card
+            title="Gift Management"
+            content="Add, update, and manage gift items for events"
+            Icon={FaGift}
+            onClick={() => navigate("/gifts/admin")}
+            index={6}
           />
         </div>
 
@@ -563,4 +563,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard
-

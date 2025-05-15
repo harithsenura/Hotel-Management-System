@@ -24,7 +24,7 @@ export default function UpdateEmpProfile() {
       setEmployee(storedEmployee);
     } else {
       axios
-        .get(`http://localhost:5000/employee/get/${id}`)
+        .get(`http://localhost:5001/employee/get/${id}`)
         .then((res) => {
           setEmployee(res.data.employee);
         })
@@ -73,7 +73,7 @@ export default function UpdateEmpProfile() {
 
     // If all validations pass, proceed with the API call
     axios
-      .put(`http://localhost:5000/employee/update/${id}`, employee)
+      .put(`http://localhost:5001/employee/update/${id}`, employee)
       .then(() => {
         // Save updated employee data to sessionStorage
         sessionStorage.setItem('employee', JSON.stringify(employee));

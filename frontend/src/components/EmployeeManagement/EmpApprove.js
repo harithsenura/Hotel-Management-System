@@ -18,7 +18,7 @@ export default function EmpApprove() {
       setEmployee(storedEmployee);
       
       // Fetch leave requests from the backend for the employee's email
-      axios.get(`http://localhost:5000/leave?email=${storedEmployee.email}`)
+      axios.get(`http://localhost:5001/leave?email=${storedEmployee.email}`)
         .then((res) => {
           setLeaves(res.data); // Set the fetched leave data
           setLoading(false); // Set loading to false when data is fetched

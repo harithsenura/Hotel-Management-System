@@ -82,7 +82,7 @@ export default function AddEmployee() {
     };
 
     axios
-      .post("http://localhost:5000/employee/add", newEmployee)
+      .post("http://localhost:5001/employee/add", newEmployee)
       .then(() => {
         setAlertMessage("Employee Added Successfully");
         setShowAlert(true);
