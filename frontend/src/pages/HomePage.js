@@ -75,7 +75,7 @@ const HomePage = () => {
     const fetchRooms = async () => {
       try {
         setRoomsLoading(true)
-        const response = await axios.get("http://localhost:5001/room/")
+        const response = await axios.get('https://welcoming-wisdom-production.up.railway.app/room/');
         // Only get 3 rooms for the preview section
         const roomsData = response.data.slice(0, 3)
         setRooms(roomsData)
