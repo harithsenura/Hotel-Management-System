@@ -47,7 +47,7 @@ const ShowEvents = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get("http://localhost:5001/events/")
+        const res = await axios.get("http://itpm-backend-production.up.railway.app/events/")
         const fetchedEvents = Array.isArray(res.data.data) ? res.data.data : []
 
         // Add gift options to each event
