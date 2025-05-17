@@ -1928,12 +1928,12 @@ const HomePage = () => {
               guests appreciated the convenience."
             </p>
             <div className="testimonial-author">
-                <img src="/romantic-couple.png" alt="David & Lisa" className="author-avatar" />
+              <img src="/romantic-couple.png" alt="David & Lisa" className="author-avatar" />
               <div className="author-info">
                 <div className="author-name">David & Lisa</div>
                 <div className="author-title">Anniversary Celebration</div>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </section>
