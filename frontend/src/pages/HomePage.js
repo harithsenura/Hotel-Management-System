@@ -1927,13 +1927,6 @@ const HomePage = () => {
               "We hosted our anniversary celebration here and used the gift selection service. It was seamless and our
               guests appreciated the convenience."
             </p>
-            <div className="testimonial-author">
-                <img src="/romantic-couple.png" alt="David & Lisa" className="author-avatar" />
-             <div className="author-info">
-                <div className="author-name">David & Lisa</div>
-                <div className="author-title">Anniversary Celebration</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
