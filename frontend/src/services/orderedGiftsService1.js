@@ -5,7 +5,7 @@ export const getAllOrders = async () => {
   try {
     console.log("Fetching all orders")
     const timestamp = new Date().getTime()
-    const response = await axios.get(`http://localhost:5001/gift-orders?t=${timestamp}`, {
+    const response = await axios.get(`http://itpm-backend-production.up.railway.app/gift-orders?t=${timestamp}`, {
       headers: {
         "Cache-Control": "no-cache",
         Pragma: "no-cache",
@@ -25,7 +25,7 @@ export const getUserOrders = async (userId) => {
   try {
     console.log(`Fetching orders for user: ${userId}`)
     const timestamp = new Date().getTime()
-    const response = await axios.get(`http://localhost:5001/gift-orders/user/${userId}?t=${timestamp}`, {
+    const response = await axios.get(`http://itpm-backend-production.up.railway.app/gift-orders/user/${userId}?t=${timestamp}`, {
       headers: {
         "Cache-Control": "no-cache",
         Pragma: "no-cache",
@@ -43,7 +43,7 @@ export const getUserOrders = async (userId) => {
 // Get order by ID
 export const getOrderById = async (orderId) => {
   try {
-    const response = await axios.get(`http://localhost:5001/gift-orders/${orderId}`)
+    const response = await axios.get(`http://itpm-backend-production.up.railway.app/gift-orders/${orderId}`)
     return response.data
   } catch (error) {
     console.error("Error fetching order:", error)
@@ -54,7 +54,7 @@ export const getOrderById = async (orderId) => {
 // Update order status
 export const updateOrderStatus = async (orderId, status) => {
   try {
-    const response = await axios.put(`http://localhost:5001/gift-orders/${orderId}/status`, { status })
+    const response = await axios.put(`http://itpm-backend-production.up.railway.app/gift-orders/${orderId}/status`, { status })
     return response.data
   } catch (error) {
     console.error("Error updating order status:", error)
@@ -74,9 +74,9 @@ export const createOrder = async (orderData) => {
     console.log("Creating order with data:", giftOrderData)
 
     // Change this line from:
-    // const response = await axios.post("http://localhost:5001/orders", orderData)
+    // const response = await axios.post("http://itpm-backend-production.up.railway.app/orders", orderData)
     // To:
-    const response = await axios.post("http://localhost:5001/gift-orders", giftOrderData, {
+    const response = await axios.post("http://itpm-backend-production.up.railway.app/gift-orders", giftOrderData, {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "no-cache",
@@ -121,7 +121,7 @@ export const createOrder = async (orderData) => {
 // Delete an order
 export const deleteOrder = async (orderId) => {
   try {
-    const response = await axios.delete(`http://localhost:5001/gift-orders/${orderId}`)
+    const response = await axios.delete(`http://itpm-backend-production.up.railway.app/gift-orders/${orderId}`)
     return response.data
   } catch (error) {
     console.error("Error deleting order:", error)
