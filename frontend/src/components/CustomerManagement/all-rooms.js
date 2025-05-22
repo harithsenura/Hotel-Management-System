@@ -67,7 +67,7 @@ const AllRooms = () => {
     const fetchRooms = async () => {
       try {
         setLoading(true)
-        const response = await axios.get("http://localhost:5001/room/")
+        const response = await axios.get("http://welcoming-wisdom-production.up.railway.app/room/")
         setRooms(response.data)
 
         // Extract unique room types for the filter
