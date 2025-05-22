@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { getUser, logout } from "../services/userService" // Import your existing user service
-import api from "../services/api" // Import the custom API service we created earlier
+import { getUser, logout } from "../services/userService"
+import api from "../services/api" // Import the custom API service
 import companylogo from "../images/company.png"
 import headingImage from "../images/bg1.JPG"
 import { ChevronRight, Gift, Users, Utensils, Calendar, LogOut, Package, User } from "lucide-react"
@@ -20,9 +20,11 @@ const HomePage = () => {
   const [showLoginRequiredModal, setShowLoginRequiredModal] = useState(false)
   const [rooms, setRooms] = useState([])
   const [roomsLoading, setRoomsLoading] = useState(true)
+  const [roomsError, setRoomsError] = useState(null)
   const [showFoodLoginRequiredModal, setShowFoodLoginRequiredModal] = useState(false)
   const [currentImageIndices, setCurrentImageIndices] = useState({})
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [corsTestResult, setCorsTestResult] = useState(null)
 
   // Get user from localStorage using your service
   useEffect(() => {
@@ -45,6 +47,22 @@ const HomePage = () => {
 
     // Clean up interval on component unmount
     return () => clearInterval(authCheckInterval)
+  }, [])
+
+  // Test CORS on component mount
+  useEffect(() => {
+    const testCORS = async () => {
+      try {
+        const result = await api.testCORS()
+        setCorsTestResult(result)
+        console.log("CORS test passed:", result)
+      } catch (error) {
+        console.error("CORS test failed:", error)
+        setCorsTestResult({ error: error.message })
+      }
+    }
+
+    testCORS()
   }, [])
 
   // Handle scroll events for navbar transparency
@@ -84,10 +102,11 @@ const HomePage = () => {
     const fetchRooms = async () => {
       try {
         setRoomsLoading(true)
+        setRoomsError(null)
 
-        // Use our custom API service instead of axios directly
-        // This will handle CORS headers properly
+        console.log("Fetching rooms from API...")
         const response = await api.get("/room/")
+        console.log("Rooms API response:", response)
 
         // Only get 3 rooms for the preview section
         const roomsData = response.data.slice(0, 3)
@@ -103,6 +122,7 @@ const HomePage = () => {
         setRoomsLoading(false)
       } catch (error) {
         console.error("Error fetching rooms:", error)
+        setRoomsError(error.message || "Failed to fetch rooms")
         // Set empty rooms array on error to avoid showing loading indefinitely
         setRooms([])
         setRoomsLoading(false)
@@ -260,11 +280,29 @@ const HomePage = () => {
 
   return (
     <div className="home-container">
-      {/* The rest of your component remains the same */}
-      <style jsx>{`
-        /* Your existing styles remain the same */
-      `}</style>
+      {/* Debug information - remove in production */}
+      {roomsError && (
+        <div
+          style={{
+            position: "fixed",
+            top: "10px",
+            right: "10px",
+            background: "#ffeeee",
+            padding: "10px",
+            border: "1px solid #ff0000",
+            zIndex: 9999,
+            maxWidth: "300px",
+            fontSize: "12px",
+          }}
+        >
+          <h4>Error fetching rooms:</h4>
+          <pre>{roomsError}</pre>
+          <h4>CORS Test:</h4>
+          <pre>{JSON.stringify(corsTestResult, null, 2)}</pre>
+        </div>
+      )}
 
+      {/* The rest of your component remains the same */}
       {/* Navbar */}
       <nav className={`navbar ${isScrolled ? "scrolled" : ""}`}>
         <img
