@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate, useLocation, Link } from "react-router-dom"
+import api from "../services/api" // Import the custom axios instance
 import { toast } from "react-toastify"
-import { getUser, login } from "../services/userService"
 
 const LoginPage = () => {
   const navigate = useNavigate()
@@ -16,9 +16,17 @@ const LoginPage = () => {
 
   useEffect(() => {
     // Check if user is already logged in
-    const user = getUser()
-    if (user) {
-      navigate(returnUrl)
+    const userStr = localStorage.getItem("user")
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr)
+        if (user && (user.id || user._id)) {
+          navigate(returnUrl)
+        }
+      } catch (error) {
+        console.error("Error parsing user data:", error)
+        localStorage.removeItem("user")
+      }
     }
   }, [navigate, returnUrl])
 
@@ -28,8 +36,23 @@ const LoginPage = () => {
     setError(null)
 
     try {
-      // Use the login service function
-      await login(email, password)
+      // Use the api instance instead of axios directly
+      const response = await api.post(`/api/users/login`, { email, password })
+
+      // Check if response has data
+      if (!response || !response.data) {
+        throw new Error("Empty response from server")
+      }
+
+      // Validate the user data
+      const userData = response.data
+      if (!userData || (!userData.id && !userData._id)) {
+        console.error("Invalid user data received:", userData)
+        throw new Error("Invalid user data received from server")
+      }
+
+      // Store user data in localStorage
+      localStorage.setItem("user", JSON.stringify(userData))
 
       // Show success message
       toast.success("Login successful!")
