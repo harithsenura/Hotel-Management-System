@@ -227,7 +227,7 @@ const AllRooms = () => {
   // Function to get room image URLs
   const getRoomImageUrls = (room) => {
     if (room.images && room.images.length > 0) {
-      return room.images.map((img) => `http://localhost:5001${img}`)
+      return room.images.map((img) => `http://welcoming-wisdom-production.up.railway.app${img}`)
     } else if (room.image) {
       return [`http://localhost:5001${room.image}`]
     }
