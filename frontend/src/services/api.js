@@ -2,7 +2,7 @@ import axios from "axios"
 
 // Set the base URL for all axios requests
 const API_BASE_URL =
-  process.env.NODE_ENV === "production" ? "https://itpm-backend-production.up.railway.app" : "http://localhost:5001"
+  process.env.NODE_ENV === "production" ? "https://welcoming-wisdom-production.up.railway.app" : "http://localhost:5001"
 
 // Create a custom axios instance
 const api = axios.create({
@@ -10,6 +10,9 @@ const api = axios.create({
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
   },
 })
 
@@ -49,6 +52,19 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error("API Error:", error)
+
+    // Handle specific error cases
+    if (error.response) {
+      // The server responded with a status code outside the 2xx range
+      console.log("Response error:", error.response.status, error.response.data)
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.log("Network error - no response received")
+    } else {
+      // Something happened in setting up the request
+      console.log("Request setup error:", error.message)
+    }
+
     return Promise.reject(error)
   },
 )
