@@ -4,7 +4,7 @@ import axios from "axios"
 const API_BASE_URL =
   process.env.NODE_ENV === "production" ? "https://welcoming-wisdom-production.up.railway.app" : "http://localhost:5001"
 
-// Create a custom axios instance
+// Create a custom axios instance with proper CORS settings
 const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
@@ -68,5 +68,17 @@ api.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+
+// Add a test function to check CORS
+api.testCORS = async () => {
+  try {
+    const response = await api.get("/cors-test")
+    console.log("CORS test successful:", response.data)
+    return response.data
+  } catch (error) {
+    console.error("CORS test failed:", error)
+    throw error
+  }
+}
 
 export default api
