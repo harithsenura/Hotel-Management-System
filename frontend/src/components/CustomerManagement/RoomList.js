@@ -1,14 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import axios from "axios"
+import api from "../services/api" // Import the custom API service
 import jsPDF from "jspdf"
 import logo from "../../images/company.png"
 import SideBar from "../SideBar/CustomerSideBar"
 
 export default function RoomList() {
   const [rooms, setRooms] = useState([])
-  const [searchQuery, setSearchQuery] = useState("") // State for search query
+  const [searchQuery, setSearchQuery] = useState("")
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage, setAlertMessage] = useState("")
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
@@ -32,10 +32,11 @@ export default function RoomList() {
   }, [availability])
 
   const fetchRooms = () => {
-    axios
-      .get("http://welcoming-wisdom-production.up.railway.app/room/", { params: availability })
+    // Use our custom API service instead of axios directly
+    api
+      .get("/room/", { params: availability })
       .then((res) => {
-        console.log("Rooms data:", res.data) // Log the rooms data to inspect image paths
+        console.log("Rooms data:", res.data)
         setRooms(res.data)
         setAlertMessage("Rooms Fetched Successfully")
         setShowAlert(true)
@@ -68,8 +69,9 @@ export default function RoomList() {
   }
 
   const confirmDelete = () => {
-    axios
-      .delete(`http://welcoming-wisdom-production.up.railway.app/room/delete/${roomToDelete}`)
+    // Use our custom API service
+    api
+      .delete(`/room/delete/${roomToDelete}`)
       .then((res) => {
         setRooms(rooms.filter((room) => room._id !== roomToDelete))
         setAlertMessage("Room Deleted Successfully")
@@ -100,10 +102,17 @@ export default function RoomList() {
 
   // Updated function to handle image URLs with better logging
   const getRoomImageUrl = (room) => {
-    if (room.image) {
-      console.log(`Room ${room._id} image path:`, room.image)
+    const API_BASE_URL =
+      process.env.NODE_ENV === "production"
+        ? "https://welcoming-wisdom-production.up.railway.app"
+        : "http://localhost:5001"
+
+    if (room.images && room.images.length > 0) {
+      console.log(`Room ${room._id} image path:`, room.images[0])
       // Make sure we're using the full URL with the correct server address
-      return `http://localhost:5001${room.image}`
+      return `${API_BASE_URL}${room.images[0]}`
+    } else if (room.image) {
+      return `${API_BASE_URL}${room.image}`
     }
     // Return a fallback image if no image is available
     return "/comfortable-hotel-room.png"
@@ -140,8 +149,9 @@ export default function RoomList() {
   }
 
   const saveRoomChanges = () => {
-    axios
-      .put(`http://welcoming-wisdom-production.up.railway.app/room/update/${currentRoom._id}`, editFormData)
+    // Use our custom API service
+    api
+      .put(`/room/update/${currentRoom._id}`, editFormData)
       .then((res) => {
         // Update the rooms list with the edited room
         setRooms(rooms.map((room) => (room._id === currentRoom._id ? { ...room, ...editFormData } : room)))
@@ -169,6 +179,7 @@ export default function RoomList() {
       room.status.toLowerCase().includes(searchQuery.toLowerCase())
     )
   })
+
   // Export rooms data as PDF
   const exportPDF = () => {
     const doc = new jsPDF()
@@ -242,6 +253,7 @@ export default function RoomList() {
     doc.save("room_list_report.pdf")
   }
 
+  // Rest of your component remains the same
   return (
     <>
       <SideBar />
