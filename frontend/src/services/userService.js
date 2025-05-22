@@ -1,4 +1,4 @@
-import axios from "axios"
+import api from "./api"
 
 // Enhanced getUser function with better error handling and data validation
 export const getUser = () => {
@@ -35,19 +35,7 @@ export const getUser = () => {
 
 export const login = async (email, password) => {
   try {
-    // Add timestamp to prevent caching
-    const timestamp = new Date().getTime()
-
-    const response = await axios.post(
-      `/api/users/login?t=${timestamp}`,
-      { email, password },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
-        },
-      },
-    )
+    const response = await api.post(`/api/users/login`, { email, password })
 
     // Validate the response data
     const data = response.data
@@ -67,15 +55,7 @@ export const login = async (email, password) => {
 
 export const register = async (registerData) => {
   try {
-    // Add timestamp to prevent caching
-    const timestamp = new Date().getTime()
-
-    const response = await axios.post(`/api/users/register?t=${timestamp}`, registerData, {
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-cache",
-      },
-    })
+    const response = await api.post(`/api/users/register`, registerData)
 
     // Validate the response data
     const data = response.data
@@ -98,16 +78,7 @@ export const logout = () => {
 
 export const updateProfile = async (user) => {
   try {
-    // Add timestamp to prevent caching
-    const timestamp = new Date().getTime()
-
-    const response = await axios.put(`/api/users/updateProfile?t=${timestamp}`, user, {
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-cache",
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
+    const response = await api.put(`/api/users/updateProfile`, user)
 
     // Validate the response data
     const data = response.data
@@ -126,21 +97,7 @@ export const updateProfile = async (user) => {
 
 export const changePassword = async (passwords) => {
   try {
-    // Add timestamp to prevent caching
-    const timestamp = new Date().getTime()
-
-    const user = getUser()
-    if (!user || !user.token) {
-      throw new Error("User not authenticated")
-    }
-
-    await axios.put(`/api/users/changePassword?t=${timestamp}`, passwords, {
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-cache",
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
+    await api.put(`/api/users/changePassword`, passwords)
   } catch (error) {
     console.error("Change password error:", error)
     throw error
@@ -161,18 +118,10 @@ export const isValidUserData = () => {
 export const refreshUserData = async () => {
   try {
     const user = getUser()
-    if (!user || (!user.id && !user._id) || !user.token) return null
+    if (!user || (!user.id && !user._id)) return null
 
-    // Add timestamp to prevent caching
-    const timestamp = new Date().getTime()
     const userId = user.id || user._id
-
-    const response = await axios.get(`/api/users/${userId}?t=${timestamp}`, {
-      headers: {
-        "Cache-Control": "no-cache",
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
+    const response = await api.get(`/api/users/${userId}`)
 
     const data = response.data
     if (data && (data.id || data._id)) {
