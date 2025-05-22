@@ -33,7 +33,7 @@ export default function RoomList() {
 
   const fetchRooms = () => {
     axios
-      .get("http://localhost:5001/room/", { params: availability })
+      .get("http://welcoming-wisdom-production.up.railway.app/room/", { params: availability })
       .then((res) => {
         console.log("Rooms data:", res.data) // Log the rooms data to inspect image paths
         setRooms(res.data)
@@ -69,7 +69,7 @@ export default function RoomList() {
 
   const confirmDelete = () => {
     axios
-      .delete(`http://localhost:5001/room/delete/${roomToDelete}`)
+      .delete(`http://welcoming-wisdom-production.up.railway.app/room/delete/${roomToDelete}`)
       .then((res) => {
         setRooms(rooms.filter((room) => room._id !== roomToDelete))
         setAlertMessage("Room Deleted Successfully")
@@ -141,7 +141,7 @@ export default function RoomList() {
 
   const saveRoomChanges = () => {
     axios
-      .put(`http://localhost:5001/room/update/${currentRoom._id}`, editFormData)
+      .put(`http://welcoming-wisdom-production.up.railway.app/room/update/${currentRoom._id}`, editFormData)
       .then((res) => {
         // Update the rooms list with the edited room
         setRooms(rooms.map((room) => (room._id === currentRoom._id ? { ...room, ...editFormData } : room)))
