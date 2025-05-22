@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate, useLocation, Link } from "react-router-dom"
-import axios from "axios"
 import { toast } from "react-toastify"
-import { getUser } from "../../services/userService"
+import { getUser, login } from "../services/userService"
 
 const LoginPage = () => {
   const navigate = useNavigate()
@@ -29,35 +28,8 @@ const LoginPage = () => {
     setError(null)
 
     try {
-      // Add a timestamp to prevent caching
-      const timestamp = new Date().getTime()
-
-      // Make the login request with proper error handling
-      const response = await axios.post(
-        `/api/users/login?t=${timestamp}`,
-        { email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Cache-Control": "no-cache",
-          },
-        },
-      )
-
-      // Check if response has data
-      if (!response || !response.data) {
-        throw new Error("Empty response from server")
-      }
-
-      // Validate the user data
-      const userData = response.data
-      if (!userData || !userData.id) {
-        console.error("Invalid user data received:", userData)
-        throw new Error("Invalid user data received from server")
-      }
-
-      // Store user data in localStorage
-      localStorage.setItem("user", JSON.stringify(userData))
+      // Use the login service function
+      await login(email, password)
 
       // Show success message
       toast.success("Login successful!")
