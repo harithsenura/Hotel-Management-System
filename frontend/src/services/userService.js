@@ -1,4 +1,4 @@
-import api from "./api"
+import api from "./api" // Import the custom axios instance
 
 // Enhanced getUser function with better error handling and data validation
 export const getUser = () => {
@@ -111,26 +111,5 @@ export const isValidUserData = () => {
     return user && (user.id || user._id) ? true : false
   } catch (error) {
     return false
-  }
-}
-
-// New function to refresh user data from server
-export const refreshUserData = async () => {
-  try {
-    const user = getUser()
-    if (!user || (!user.id && !user._id)) return null
-
-    const userId = user.id || user._id
-    const response = await api.get(`/api/users/${userId}`)
-
-    const data = response.data
-    if (data && (data.id || data._id)) {
-      localStorage.setItem("user", JSON.stringify(data))
-      return data
-    }
-    return null
-  } catch (error) {
-    console.error("Error refreshing user data:", error)
-    return null
   }
 }
