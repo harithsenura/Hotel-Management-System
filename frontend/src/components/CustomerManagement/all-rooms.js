@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
+import api from "../services/api" // Import the custom API service
 import { motion, AnimatePresence } from "framer-motion"
 import {
   ChevronLeft,
@@ -67,7 +67,8 @@ const AllRooms = () => {
     const fetchRooms = async () => {
       try {
         setLoading(true)
-        const response = await axios.get("http://welcoming-wisdom-production.up.railway.app/room/")
+        // Use our custom API service
+        const response = await api.get("/room/")
         setRooms(response.data)
 
         // Extract unique room types for the filter
@@ -226,10 +227,15 @@ const AllRooms = () => {
 
   // Function to get room image URLs
   const getRoomImageUrls = (room) => {
+    const API_BASE_URL =
+      process.env.NODE_ENV === "production"
+        ? "https://welcoming-wisdom-production.up.railway.app"
+        : "http://localhost:5001"
+
     if (room.images && room.images.length > 0) {
-      return room.images.map((img) => `http://welcoming-wisdom-production.up.railway.app${img}`)
+      return room.images.map((img) => `${API_BASE_URL}${img}`)
     } else if (room.image) {
-      return [`http://localhost:5001${room.image}`]
+      return [`${API_BASE_URL}${room.image}`]
     }
 
     // Generate placeholder images if no images are available
@@ -242,10 +248,15 @@ const AllRooms = () => {
 
   // Function to get the main room image for the card
   const getRoomImageUrl = (room) => {
+    const API_BASE_URL =
+      process.env.NODE_ENV === "production"
+        ? "https://welcoming-wisdom-production.up.railway.app"
+        : "http://localhost:5001"
+
     if (room.images && room.images.length > 0) {
-      return `http://localhost:5001${room.images[0]}`
+      return `${API_BASE_URL}${room.images[0]}`
     } else if (room.image) {
-      return `http://localhost:5001${room.image}`
+      return `${API_BASE_URL}${room.image}`
     }
     return `/luxury-still-life.png?height=300&width=400&query=luxury ${room.roomType} hotel room`
   }
