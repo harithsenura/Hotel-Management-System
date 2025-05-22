@@ -1,25 +1,35 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import Input from "../../components/Input/Input"
-import Title from "../../components/Title/Title"
-import classes from "./registerPage.module.css"
-import Button from "../../components/Button/Button"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { register as registerUser, getUser } from "../services/userService"
+import api from "../services/api" // Import the custom axios instance
 import { toast } from "react-toastify"
+import Input from "../components/Input/Input"
+import Title from "../components/Title/Title"
+import Button from "../components/Button/Button"
+import classes from "./registerPage.module.css"
 
 export default function RegisterPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const returnUrl = params.get("returnUrl") || "/"
 
   // Check if user is already logged in
   useEffect(() => {
-    const user = getUser()
-    if (user) {
-      navigate(returnUrl)
+    const userStr = localStorage.getItem("user")
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr)
+        if (user && (user.id || user._id)) {
+          navigate(returnUrl)
+        }
+      } catch (error) {
+        console.error("Error parsing user data:", error)
+        localStorage.removeItem("user")
+      }
     }
   }, [navigate, returnUrl])
 
@@ -31,19 +41,46 @@ export default function RegisterPage() {
   } = useForm()
 
   const submit = async (data) => {
-    try {
-      await registerUser(data)
-      toast.success("Registration successful! You are now logged in.")
-      navigate(returnUrl)
-    } catch (error) {
-      let errorMessage = "Registration failed. Please try again."
+    setLoading(true)
+    setError(null)
 
-      if (error.response && error.response.data) {
-        errorMessage =
-          typeof error.response.data === "string" ? error.response.data : error.response.data.message || errorMessage
+    try {
+      const response = await api.post(`/api/users/register`, data)
+
+      // Check if response has data
+      if (!response || !response.data) {
+        throw new Error("Empty response from server")
       }
 
-      toast.error(errorMessage)
+      // Validate the user data
+      const userData = response.data
+      if (!userData || (!userData.id && !userData._id)) {
+        console.error("Invalid user data received:", userData)
+        throw new Error("Invalid user data received from server")
+      }
+
+      // Store user data in localStorage
+      localStorage.setItem("user", JSON.stringify(userData))
+
+      toast.success("Registration successful! You are now logged in.")
+      navigate(returnUrl)
+    } catch (err) {
+      console.error("Registration error:", err)
+
+      // Handle different types of errors
+      if (err.response) {
+        // The server responded with a status code outside the 2xx range
+        const serverError = err.response.data || "Server error"
+        setError(typeof serverError === "string" ? serverError : "Registration failed")
+      } else if (err.request) {
+        // The request was made but no response was received
+        setError("No response from server. Please check your internet connection.")
+      } else {
+        // Something else happened while setting up the request
+        setError(err.message || "An error occurred during registration")
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -51,6 +88,9 @@ export default function RegisterPage() {
     <div className={classes.container}>
       <div className={classes.details}>
         <Title title="Register" />
+
+        {error && <div className="error-message">{error}</div>}
+
         <form onSubmit={handleSubmit(submit)} noValidate>
           <Input
             type="text"
@@ -105,7 +145,7 @@ export default function RegisterPage() {
             error={errors.address}
           />
 
-          <Button type="submit" text="Register" />
+          <Button type="submit" text={loading ? "Registering..." : "Register"} disabled={loading} />
 
           <div className={classes.login}>
             Already a user? &nbsp;
